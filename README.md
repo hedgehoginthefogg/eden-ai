@@ -8,10 +8,16 @@ The tips and pictures are licensed under [CC BY 4.0](https://creativecommons.org
 
 ## Using the page
 
+Until the first tips are posted, the page shows a short note saying cards will appear as they're posted. Some features appear once there are enough tips for them to be useful: the quiz and "Shake for a tip" at 5 tips, the ways of arranging the cards at 6, "Find the rogue bot" at 8 and search at 10.
+
 - **Arrange the cards:** view them by date (oldest first), gathered into category piles, scattered across the table or shuffled. Select a category pile to spread its cards out.
 - **Search:** type a word or phrase to filter the cards. Every word you type must appear in the tip's headline, text, prompt or category.
 - **Read a tip:** select a card to open it full size, with the tip, its "Try this" prompt and why it works. Use "Previous tip" and "Next tip" to move through the cards in their current order.
 - **Copy a prompt:** select "Copy prompt" and paste it into a new chat.
+- **Quiz yourself:** answer a question about each card from memory, rate how sure you are, then compare your answer with the model answer. Choose a random mix, one category or cards you pick. Two people can play on one device, taking turns to answer the same question before comparing answers. Or play on two devices: one of you chooses the cards and gets a short code (or a link) for the other, then you take turns, one answering while the other checks the answer against its key points.
+- **Find the rogue bot:** a game where a bot hides under one of the cards. Read the clue, which comes from a card's content, and pick the right card before the bot hides again. See how many times you can find it in 60 seconds, or play without a time limit.
+- **Shake for a tip:** on a phone, select "Shake for a tip" and shake your phone to rattle a catalogue drawer, and a random card pops out. There's also a "Pick a card" button for anyone who can't or doesn't want to shake.
+- **Add to your home screen:** on a phone or tablet, select "Add these tips to your home screen" to keep the tips like an app. They work offline once opened.
 - **List view:** shows every tip as text, which suits screen readers and quick scanning.
 - **Link to a tip:** each tip has its own address. For example, `#tip-4` at the end of the page address opens tip 4.
 
@@ -20,6 +26,9 @@ The tips and pictures are licensed under [CC BY 4.0](https://creativecommons.org
 | File | What it is |
 |---|---|
 | `index.html` | The whole page: tips, pictures, fonts and code in one self-contained file. It makes no requests to other sites, so it also works saved to your computer and opened offline. |
+| `manifest.webmanifest` | Describes the page as an app (name, colours and icons) so it can be added to a phone's home screen. |
+| `sw.js` | A service worker that keeps the page working offline. It always tries the internet first, so new tips appear as soon as they're published. |
+| `icon-192.png`, `icon-512.png`, `apple-touch-icon.png` | The app icons for Android and iPhone home screens. |
 | `README.md` | This file. |
 | `LICENSE` | The licence for the tips, pictures and page (CC BY 4.0). |
 
@@ -28,8 +37,8 @@ The tips and pictures are licensed under [CC BY 4.0](https://creativecommons.org
 The page is exported from the GenAI tip image maker, a Claude Artifact used by the Eden Centre to write the tips and make their images.
 
 1. In the image maker, tick **Posted in the channel** on each tip once it has gone out in Teams, and check the date beside it.
-2. Select **Export tips page (HTML)** and save the file. It's called `index.html`.
-3. In this repository on GitHub, select **Add file**, then **Upload files**, and upload the new `index.html` to replace the old one.
+2. Select **Export tips page (ZIP)** and save the file. It's called `genai-tips-site.zip`.
+3. Unzip it. In this repository on GitHub, select **Add file**, then **Upload files**, and upload all six files from the ZIP, replacing the old ones. Only `index.html` usually changes, but uploading them all keeps everything in step.
 4. Add a short commit message, such as "Add tips posted in November", and select **Commit changes**.
 
 GitHub Pages republishes the site automatically, usually within a few minutes.
