@@ -286,7 +286,27 @@ fieldset.players { margin: 0.4rem 0 0.2rem; }
 .qcheckcard .qface > svg { display: block; width: 100%; height: auto; border-radius: 6px; }
 .shakebtn { min-height: 46px; border: 2px solid var(--ink); background: var(--surface); border-radius: 999px; padding: 0.35rem 1.15rem; font-weight: 700; cursor: pointer; }
 .shakebtn[hidden] { display: none; }
-body.selecting #botBtn { display: none; }
+body.selecting #botBtn, body.selecting #matchBtn { display: none; }
+.mboard { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+@media (max-width: 640px) { .mboard { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.mtile { position: relative; min-height: 132px; border: 0; border-radius: 8px; cursor: pointer; padding: 0.6rem 0.7rem; font: inherit; text-align: left;
+  color: #1D2533; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; transition: transform 160ms ease; }
+.mtile:hover { transform: translateY(-3px); }
+.mtile:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.mtile .mlab { font-family: "Courier Prime", ui-monospace, monospace; font-weight: 700; font-size: 0.78rem; border-bottom: 2px solid rgba(168, 38, 29, 0.6); padding-bottom: 0.2rem; margin-bottom: 0.4rem; }
+.mtile .mtext { font-size: 0.92rem; line-height: 1.3; }
+.mtile.head .mtext { font-family: "Newsreader", Georgia, serif; font-weight: 600; font-size: 1.02rem; line-height: 1.2; }
+.mtile.down { background: #1D2533; color: #F6EFD9; align-items: center; justify-content: center; text-align: center;
+  background-image: repeating-linear-gradient(135deg, rgba(246,239,217,0.06) 0 10px, transparent 10px 20px); }
+.mtile.down .mlab { border: 0; margin: 0; font-size: 0.95rem; }
+.mtile.down.idea { background-color: #3A4458; }
+.mtile.up { background: var(--tint, #F2E6B6); }
+.mtile.up.idea { background: #FDFBF5; border: 2px solid #1D2533; }
+.mtile.matched { box-shadow: 0 0 0 4px #2B6A37; cursor: default; }
+.mtile.matched::after { content: "✓"; position: absolute; right: 0.5rem; bottom: 0.3rem; font-weight: 700; color: #2B6A37; font-size: 1.2rem; }
+.mtile.flip { animation: mflip 260ms ease; }
+@keyframes mflip { 0% { transform: scaleX(1); } 50% { transform: scaleX(0.05); } 100% { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .mtile.flip { animation: none; } .mtile, .mtile:hover { transition: none; transform: none; } }
 .botart { width: 120px; margin: 0.2rem auto 0.6rem; }
 .botart.small { width: 84px; }
 .botart svg, .btile .peek svg { display: block; width: 100%; height: auto; }
@@ -352,6 +372,20 @@ body.selecting .shakebtn { display: none; }
   .card, .table, .pilelabel, .card .face, .card .date { transition: none !important; }
   dialog[open] { animation: none; }
 }
+.foot details.process { margin: 0.4rem 0 1rem; }
+.foot details.process summary { cursor: pointer; font-weight: 700; padding: 0.6rem 0; }
+.foot details.process p { max-width: 70ch; }
+.trailer { margin: 0.5rem 0 1.75rem; }
+.trailer h2 { font-size: 1.3rem; margin: 0 0 0.6rem; }
+.trailerrow { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: flex-start; }
+.trailer video { width: min(360px, 100%); height: auto; border-radius: 8px; background: #1D2533; }
+.trailertext { flex: 1 1 280px; max-width: 70ch; }
+.trailertext p { margin: 0 0 0.75rem; }
+.transcript summary { cursor: pointer; font-weight: 700; padding: 0.4rem 0; }
+.transcript h3 { font-size: 1.05rem; margin: 1rem 0 0.2rem; }
+.transcript .when { color: var(--muted); margin: 0 0 0.4rem; }
+.transcript .ttable { border-collapse: collapse; margin: 0.4rem 0 0.8rem; }
+.transcript .ttable th, .transcript .ttable td { text-align: left; padding: 0.3rem 0.6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
 </style>
 </head>
 <body>
@@ -363,6 +397,18 @@ body.selecting .shakebtn { display: none; }
     <p class="intro howto" id="howto"></p>
     <p class="install" id="installRow" hidden><button type="button" class="linkish" id="installBtn">Add these tips to your home screen</button></p>
   </header>
+
+  <section class="trailer" aria-labelledby="trailerHead">
+    <h2 id="trailerHead">Watch the trailer</h2>
+    <div class="trailerrow">
+      <video controls preload="metadata" playsinline poster="trailer-poster.jpg" width="360" height="360" aria-describedby="trailerNote"><source src="genai-tips-trailer.mp4" type="video/mp4"><a href="genai-tips-trailer.mp4">Download the trailer video (MP4)</a></video>
+      <div class="trailertext">
+        <p id="trailerNote">A 36-second introduction to the series. It has no sound, and its captions are part of the picture.</p>
+        <details class="transcript"><summary>Read a description of the video</summary><h3>Scene 1: Opening</h3><p class="when">0:00 to 0:04</p><p>A wooden catalogue drawer labelled “GenAI tips” slides up into view, with the tops of coloured tip cards showing inside it.</p><p>The title types out above the drawer, letter by letter: “Working with GenAI in 2026/27”.</p><p><strong>Caption:</strong> “A new series for the AI and Education channel”</p><h3>Scene 2: The first card</h3><p class="when">0:04 to 0:08</p><p>The drawer rattles, and the first tip card rises out of it: “GenAI tip 1: Your chatbot has a computer”.</p><p>The card’s picture shows a chatbot connected to four tools: Search the web, Run code, Make files and Analyse data.</p><p><strong>Caption:</strong> “Short, practical GenAI tips, one every weekday”</p><h3>Scene 3: Themed collections</h3><p class="when">0:08 to 0:13</p><p>The drawer drops away and the first card moves to the centre.</p><p>Cards in different colours fan out behind it, one for each themed collection. Only the first card shows its collection name, “How chatbots work now”.</p><p><strong>Caption:</strong> “Tips come in themed collections, starting with How chatbots work now”</p><h3>Scene 4: A week of tips</h3><p class="when">0:13 to 0:18</p><p>The fan folds away and five cards slide into a row, with the days of the week typed above them. The Tuesday and Thursday cards lift up and are labelled “AI at LSE” and “In the news”.</p><table class="ttable"><caption class="vh">The five cards in the week</caption><thead><tr><th scope="col">Day</th><th scope="col">Tip card</th><th scope="col">Type</th></tr></thead><tbody><tr><td>Monday</td><td>Your chatbot has a computer</td><td>How chatbots work now</td></tr><tr><td>Tuesday</td><td>What’s new with Claude Artifacts?</td><td>AI at LSE</td></tr><tr><td>Wednesday</td><td>Name the tool you want it to use</td><td>How chatbots work now</td></tr><tr><td>Thursday</td><td>Experts followed their AI agent’s suggestions</td><td>In the news</td></tr><tr><td>Friday</td><td>Chatbots reward expertise</td><td>How chatbots work now</td></tr></tbody></table><p><strong>Caption:</strong> “Three bite-sized tips a week, plus an AI at LSE update and a news story”</p><h3>Scene 5: Try this</h3><p class="when">0:18 to 0:23</p><p>The other cards fade, and Friday’s card, “Chatbots reward expertise”, grows to fill the screen and flips over.</p><p>The back of the card is headed “GenAI tip 5 · Try this” and shows a prompt: “Using the attached course syllabus and my blog post on formative assessment, suggest three dialogic feedback activities for this course.” A “Copy prompt” button pulses once.</p><p><strong>Caption:</strong> “Every card has a prompt to try in Claude or Copilot”</p><h3>Scene 6: The collection</h3><p class="when">0:23 to 0:28</p><p>A search box and a “Quiz yourself” button fade in, and twelve tip cards deal up from the bottom of the screen into a grid, one at a time, in a mix of collection colours.</p><p>The twelve cards in the grid are:</p><ul><li>Your chatbot has a computer</li><li>Ask for evidence, not agreement</li><li>Show it an example</li><li>Keep your master copy outside the chatbot</li><li>Position 1 needs a spell-checker decision</li><li>Every chat is a role-play</li><li>Find themes in free-text comments</li><li>Experts followed their AI agent’s suggestions</li><li>Training vs prompting</li><li>Share a link that stays up to date</li><li>Observed assessment continues in 2026/27</li><li>Make a GIF for your slides</li></ul><p><strong>Caption:</strong> “Every tip collected on one page, with a quiz to test yourself”</p><h3>Scene 7: Games</h3><p class="when">0:28 to 0:31</p><p>The tip card “Agent: a model that works in steps” appears in the centre. A small robot, the rogue bot from the tips page game, rises from behind it, wobbles and says “Found me!”.</p><p><strong>Caption:</strong> “…and a few games along the way”</p><h3>Scene 8: End card</h3><p class="when">0:31 to 0:36</p><p>Everything slides away and an end card drops in, then stays still for the rest of the video.</p><p>The end card reads: “Starts today. Working with GenAI in 2026/27. In the AI and Education channel, every weekday. Every tip in one place: tinyurl.com/edenaitips”. It also shows a QR code that opens the same address.</p></details>
+        <p><a href="genai-tips-trailer-description.pdf">Download the description as an accessible PDF</a> (9 pages)</p>
+      </div>
+    </div>
+  </section>
 
   <div class="controls">
     <div class="search">
@@ -379,6 +425,7 @@ body.selecting .shakebtn { display: none; }
     <button type="button" class="quizbtn" id="quizBtn">Quiz yourself</button>
     <button type="button" class="shakebtn" id="shakeBtn" hidden>Shake for a tip</button>
     <button type="button" class="shakebtn" id="botBtn" hidden>Find the rogue bot</button>
+    <button type="button" class="shakebtn" id="matchBtn" hidden>Match the pairs</button>
     <p class="count" id="count" role="status" aria-live="polite"></p>
   </div>
 
@@ -405,9 +452,10 @@ body.selecting .shakebtn { display: none; }
   </main>
 
   <footer class="foot">
-    <p>GenAI disclaimer: these tips and their pictures were made with help from Claude.</p>
+    <p>GenAI disclaimer: I (Steven Williams, AI and Education Specialist at the Eden Centre and Digital Skills Lab) designed this series and used Claude (Anthropic) to help build it. I’ve reviewed and edited every tip before posting it, and I take responsibility for any errors.</p>
+    <details class="process"><summary>How these tips were made</summary><p><strong>Planning.</strong> Outside of Claude, I brainstormed what I wanted, the audience, and the aim of the series: every tip should change how colleagues use chatbots or how they talk about them. After some initial tests in Claude, I decided on the themed collections, the weekly pattern and the house style.</p><p><strong>Drafting.</strong> I worked in a Claude Project that has access to a detailed work tracker I update every day, and Project Instructions that outline the learning principles which I believe are most relevant to GenAI-created resources. In a single chat inside the Project, using the Opus 5.5 model on High thinking, I gave Claude workshop materials I've created, articles I’ve written for the AI and Education Toolkit and activities I drafted for the new AI Fluency course. I asked Claude to extract possible tips from this content, with each including a “Try this” prompt, quiz question and game clue. I gave feedback on each draft, often several times, and manually rewrote, merged or deleted many cards along the way. For the LSE and News cards, I asked it to draw on my Work Tracker document, and include a “Why it matters” rather than “Try this” prompt.</p><p><strong>Pictures and code.</strong> Claude drew each card’s picture as code (SVG), following a style I set. It also wrote the code for the image maker that turns each tip into a card, for this page and its games, and for the trailer video, which is animated entirely in code.</p><p><strong>Checking.</strong> Each tip is marked “Drafted by Claude” until I’ve edited it and checked it against its sources. I only post cards I’ve marked “Edited and approved”.</p><p><strong>Questions or corrections:</strong> Steven Williams, <a href="mailto:s.williams10@lse.ac.uk">s.williams10@lse.ac.uk</a></p></details>
     <p>Tips and pictures by the Eden Centre, LSE, licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>. You’re welcome to share and adapt them with credit.</p>
-    <p>Updated 30 Oct 2026.</p>
+    <p>Updated 2 Nov 2026.</p>
   </footer>
 </div>
 
@@ -423,7 +471,7 @@ body.selecting .shakebtn { display: none; }
         <h3>Try this</h3>
         <div class="trybox"><p id="dTry"></p><button type="button" class="copybtn" id="dCopy">Copy prompt</button></div>
       </div>
-      <div id="dWhyBox"><h3>Why it works</h3><p id="dWhy"></p></div>
+      <div id="dWhyBox"><h3 id="dWhyHead">Why it works</h3><p id="dWhy"></p></div>
       <p id="dLink"></p>
       <div class="related" id="dRelBox" hidden>
         <h3 id="dRelHead">Related tips</h3>
@@ -558,7 +606,7 @@ body.selecting .shakebtn { display: none; }
         <summary>Show the whole card</summary>
         <div class="qface" id="qCheckFace" aria-hidden="true"></div>
         <p id="qCheckTip"></p>
-        <p id="qCheckWhyBox"><strong>Why it works:</strong> <span id="qCheckWhy"></span></p>
+        <p id="qCheckWhyBox"><strong id="qCheckWhyLab">Why it works:</strong> <span id="qCheckWhy"></span></p>
       </details>
       <div class="qactions"><button type="button" class="qbtn primary" id="qCheckNext">Next card</button></div>
     </section>
@@ -595,7 +643,7 @@ body.selecting .shakebtn { display: none; }
           <p class="vh" id="qAlt"></p>
           <p id="qTip"></p>
           <p id="qTryBox"><strong>Try this:</strong> <span id="qTry"></span></p>
-          <p id="qWhyBox"><strong>Why it works:</strong> <span id="qWhy"></span></p>
+          <p id="qWhyBox"><strong id="qWhyLab">Why it works:</strong> <span id="qWhy"></span></p>
         </div>
       </div>
       <p class="discuss" id="qDiscuss" hidden>Talk it through: where do your answers differ, and which parts of the model answer did each of you miss?</p>
@@ -642,6 +690,30 @@ body.selecting .shakebtn { display: none; }
       <h3 id="bFoundHead">Cards the bot hid under</h3>
       <ul class="rellinks" id="bFound" aria-labelledby="bFoundHead"></ul>
       <div class="qactions"><button type="button" class="qbtn primary" id="bAgain">Play again</button><button type="button" class="qbtn" id="bFinish">Close</button></div>
+    </section>
+  </div>
+</dialog>
+
+<dialog id="matchDlg" aria-labelledby="mHead">
+  <div class="qwrap botwrap">
+    <div class="qtop"><h2 id="mHead">Match the pairs</h2><button type="button" class="qbtn" id="mClose">Close</button></div>
+    <section id="mIntro">
+      <p>Every tip card has a key idea. Turn over two cards at a time to find each tip and its key idea. If they don’t match, they turn back over, so try to remember where each one was.</p>
+      <p class="why-line">Dark cards are tips and grey cards are key ideas, so turn over one of each. The fewer goes you take, the better.</p>
+      <p class="why-line" id="mBest"></p>
+      <div class="qactions"><button type="button" class="qbtn primary" id="mStart">Start</button></div>
+    </section>
+    <section id="mPlay" hidden>
+      <div class="bstatus"><span id="mMoves">Goes: 0</span><span id="mPairs">Pairs: 0</span></div>
+      <p class="clue" id="mMsg" role="status" aria-live="polite"></p>
+      <div class="mboard" id="mBoard" role="group" aria-label="Face-down cards"></div>
+    </section>
+    <section id="mDone" hidden>
+      <h2 id="mDoneHead" tabindex="-1"></h2>
+      <p id="mDoneText"></p>
+      <h3 id="mListHead">The tips in this game</h3>
+      <ul class="rellinks" id="mList" aria-labelledby="mListHead"></ul>
+      <div class="qactions"><button type="button" class="qbtn primary" id="mAgain">Play again</button><button type="button" class="qbtn" id="mFinish">Close</button></div>
     </section>
   </div>
 </dialog>
@@ -707,8 +779,9 @@ body.selecting .shakebtn { display: none; }
 "use strict";
 const TIPS = JSON.parse(document.getElementById("data").textContent);
 /* How many posted tips each feature needs before it appears. */
-const UNLOCK = { install: 1, quiz: 5, shake: 5, views: 6, bot: 8, search: 10 };
-const CAT_ORDER = ["How GenAI works", "Critical AI literacy", "Better prompts", "Context and files", "GenAI at work",
+const UNLOCK = { install: 1, quiz: 5, shake: 5, views: 6, match: 6, bot: 8, search: 10 };
+const whyLabel = (cat) => ["Critical AI literacy", "In the news", "AI at LSE"].includes(cat) ? "Why it matters" : "Why it works";
+const CAT_ORDER = ["How chatbots work now", "Critical AI literacy", "Better prompts", "Context and files", "Work you can keep", "GenAI at work",
   "Claude Artifacts", "Making things with code", "In the news", "AI at LSE"];
 const TAG = '<svg viewBox="0 0 30 30" aria-hidden="true"><path d="M3 2.5 H13.5 L28.5 17.5 L17.5 28.5 L2.5 13.5 V3 Z" fill="currentColor" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="8.6" cy="8.6" r="3" fill="var(--pill)"/></svg>';
 const $ = (id) => document.getElementById(id);
@@ -951,8 +1024,8 @@ function renderList(vis) {
       const tip = document.createElement("p"); tip.textContent = t.tip;
       body.append(meta, h, tip);
       if (t.try) body.appendChild(tryBlock(t.try, t.head));
-      if (t.why) { const w = document.createElement("p"); const s = document.createElement("strong"); s.textContent = "Why it works: "; w.append(s, t.why); body.appendChild(w); }
-      if (t.link) body.appendChild(linkPara(t.link));
+      if (t.why) { const w = document.createElement("p"); const s = document.createElement("strong"); s.textContent = `${whyLabel(t.cat)}: `; w.append(s, t.why); body.appendChild(w); }
+      if (t.link) body.appendChild(linkPara(t.link, t.linkText));
       if (relatedOf(t).length) {
         const wrap = document.createElement("div"); wrap.className = "relwrap";
         const rh = document.createElement("h3"); rh.className = "relhead"; rh.textContent = "Related tips";
@@ -978,9 +1051,11 @@ function tryBlock(text, head) {
   }
   return box;
 }
-function linkPara(url) {
+function linkPara(url, text) {
   const p = document.createElement("p"); const a = document.createElement("a");
-  a.href = url; a.textContent = "Find out more"; a.rel = "noopener"; a.target = "_blank";
+  let host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) {}
+  a.href = url; a.textContent = (text || "").trim() || host || "Find out more"; a.rel = "noopener"; a.target = "_blank";
+  const lead = document.createElement("strong"); lead.textContent = "Further reading: "; p.appendChild(lead);
   const note = document.createElement("span"); note.className = "vh"; note.textContent = " (opens in a new tab)";
   a.appendChild(note); p.appendChild(a); return p;
 }
@@ -1035,8 +1110,8 @@ function openDetail(i) {
   const prompt = promptOf(t.try);
   $("dCopy").hidden = !prompt; $("dCopy").textContent = "Copy prompt"; $("dCopy").classList.remove("done");
   $("dCopy").onclick = () => copyText(prompt, $("dCopy"), $("dStatus"));
-  $("dWhyBox").hidden = !t.why; $("dWhy").textContent = t.why || "";
-  $("dLink").replaceChildren(); if (t.link) $("dLink").replaceChildren(...linkPara(t.link).childNodes);
+  $("dWhyHead").textContent = whyLabel(t.cat); $("dWhyBox").hidden = !t.why; $("dWhy").textContent = t.why || "";
+  $("dLink").replaceChildren(); if (t.link) $("dLink").replaceChildren(...linkPara(t.link, t.linkText).childNodes);
   const rel = relatedButtons(t, (k) => openDetail(k));
   $("dRel").replaceChildren(...rel.childNodes);
   $("dRelBox").hidden = !$("dRel").children.length;
@@ -1439,7 +1514,7 @@ function showCheck() {
   $("qCheckHint").textContent = `Tell them the category (${t.cat}), or the card’s headline: “${t.head}”.`;
   $("qCheckFace").innerHTML = faceCopy(t, "c");
   $("qCheckTip").textContent = t.tip;
-  $("qCheckWhyBox").hidden = !t.why; $("qCheckWhy").textContent = t.why || "";
+  $("qCheckWhyLab").textContent = `${whyLabel(t.cat)}:`; $("qCheckWhyBox").hidden = !t.why; $("qCheckWhy").textContent = t.why || "";
   $("qCheckCard").open = false;
   updateVerdictHint();
   $("qCheckNext").textContent = quiz.pos < quiz.list.length - 1 ? "Next card" : "See how you did";
@@ -1490,7 +1565,7 @@ function showReveal() {
   $("qAlt").textContent = t.alt ? `Picture: ${t.alt}` : "";
   $("qTip").textContent = t.tip;
   $("qTryBox").hidden = !t.try; $("qTry").textContent = t.try || "";
-  $("qWhyBox").hidden = !t.why; $("qWhy").textContent = t.why || "";
+  $("qWhyLab").textContent = `${whyLabel(t.cat)}:`; $("qWhyBox").hidden = !t.why; $("qWhy").textContent = t.why || "";
   $("qDiscuss").hidden = !twoPlayer();
   $("qNext").hidden = true;
   $("qShowHead").focus();
@@ -1827,6 +1902,96 @@ $("bFinish").addEventListener("click", () => $("botDlg").close());
 $("bClose").addEventListener("click", () => $("botDlg").close());
 $("botDlg").addEventListener("close", () => { bot.running = false; cancelAnimationFrame(bot.raf); $("botBtn").focus({ preventScroll: true }); });
 
+/* ---------- Match the pairs ---------- */
+const MKEY = "edenGenaiTipsMatch.v1";
+// Each card's key idea comes from its game clue: "I’m hiding under the card about …".
+function keyIdea(t) {
+  const c = Array.isArray(t.botClues) && t.botClues.length ? String(t.botClues[0]) : "";
+  const m = c.match(/^I[’']m hiding under the card (?:about|that is about)\s+(.+?)[.!?]?$/i);
+  if (!m) return "";
+  const x = m[1].trim();
+  return x.charAt(0).toUpperCase() + x.slice(1) + ".";
+}
+const matchPool = () => chrono.filter((i) => keyIdea(TIPS[i]));
+const mg = { tiles: [], first: null, busy: false, moves: 0, found: 0, n: 0, picks: [] };
+function mBest(n) { try { return Number(localStorage.getItem(`${MKEY}.${n}`)) || 0; } catch (e) { return 0; } }
+function showMatchSection(id) { ["mIntro", "mPlay", "mDone"].forEach((x) => { $(x).hidden = x !== id; }); $("matchDlg").scrollTop = 0; }
+function mSize() { return Math.min(window.matchMedia && window.matchMedia("(max-width: 640px)").matches ? 4 : 6, matchPool().length); }
+function openMatch() {
+  showMatchSection("mIntro");
+  const b = mBest(mSize());
+  $("mBest").textContent = b ? `Your best so far: ${b} goes.` : "";
+  if (!$("matchDlg").open) $("matchDlg").showModal();
+  $("mStart").focus();
+}
+function faceDown(b) {
+  const tile = mg.tiles[Number(b.dataset.k)];
+  b.className = `mtile down ${tile.kind}`; b.style.removeProperty("--tint");
+  b.innerHTML = `<span class="mlab">${tile.kind === "head" ? "GenAI tip" : "Key idea"}</span>`;
+  b.setAttribute("aria-label", `Face-down ${tile.kind === "head" ? "tip" : "key idea"} card ${Number(b.dataset.k) + 1}`);
+}
+function faceUp(b) {
+  const tile = mg.tiles[Number(b.dataset.k)], t = TIPS[tile.i];
+  b.className = `mtile up ${tile.kind}${reduced.matches ? "" : " flip"}`;
+  if (tile.kind === "head") b.style.setProperty("--tint", t.tint || "#F2E6B6");
+  const lab = document.createElement("span"); lab.className = "mlab"; lab.textContent = tile.kind === "head" ? "GenAI tip" : "Key idea";
+  const tx = document.createElement("span"); tx.className = "mtext"; tx.textContent = tile.kind === "head" ? t.head : keyIdea(t);
+  b.replaceChildren(lab, tx);
+  b.setAttribute("aria-label", `${tile.kind === "head" ? "Tip" : "Key idea"}: ${tx.textContent}`);
+}
+function startMatch() {
+  const n = mSize();
+  mg.n = n; mg.moves = 0; mg.found = 0; mg.first = null; mg.busy = false;
+  mg.picks = shuffled(matchPool(), Math.random).slice(0, n);
+  mg.tiles = shuffled(mg.picks.flatMap((i) => [{ i, kind: "head" }, { i, kind: "idea" }]), Math.random);
+  const board = $("mBoard"); board.innerHTML = "";
+  mg.tiles.forEach((_, k) => { const b = document.createElement("button"); b.type = "button"; b.dataset.k = String(k); faceDown(b); board.appendChild(b); });
+  $("mMoves").textContent = "Goes: 0"; $("mPairs").textContent = `Pairs: 0 of ${n}`;
+  $("mMsg").textContent = "Turn over a tip and a key idea you think go together.";
+  showMatchSection("mPlay");
+  board.firstChild && board.firstChild.focus();
+}
+async function onMatchTile(b) {
+  if (mg.busy) return;
+  const k = Number(b.dataset.k), tile = mg.tiles[k];
+  if (tile.done || (mg.first && mg.first === b)) return;
+  faceUp(b);
+  if (!mg.first) { mg.first = b; $("mMsg").textContent = `${b.getAttribute("aria-label").replace(/\.$/, "")}. Now turn over another card.`; return; }
+  const a = mg.first, ta = mg.tiles[Number(a.dataset.k)];
+  mg.first = null; mg.moves += 1; $("mMoves").textContent = `Goes: ${mg.moves}`;
+  if (ta.i === tile.i && ta.kind !== tile.kind) {
+    ta.done = tile.done = true; a.classList.add("matched"); b.classList.add("matched");
+    a.setAttribute("aria-disabled", "true"); b.setAttribute("aria-disabled", "true");
+    mg.found += 1; $("mPairs").textContent = `Pairs: ${mg.found} of ${mg.n}`;
+    $("mMsg").textContent = `A pair: “${TIPS[tile.i].head}” goes with “${keyIdea(TIPS[tile.i])}”`;
+    if (mg.found === mg.n) { await wait(900); endMatch(); }
+    return;
+  }
+  mg.busy = true;
+  $("mMsg").textContent = `${b.getAttribute("aria-label").replace(/\.$/, "")}. Not a pair, so both cards will turn back over.`;
+  await wait(1500);
+  faceDown(a); faceDown(b); mg.busy = false;
+}
+function endMatch() {
+  const n = mg.n; let best = mBest(n), newBest = false;
+  if (!best || mg.moves < best) { best = mg.moves; newBest = true; try { localStorage.setItem(`${MKEY}.${n}`, String(mg.moves)); } catch (e) { /* ignore */ } }
+  showMatchSection("mDone");
+  $("mDoneHead").textContent = `All ${n} pairs in ${mg.moves} goes`;
+  $("mDoneText").textContent = `${mg.moves === n ? "A perfect game: every go was a match." : `A perfect game would take ${n} goes.`} ${newBest ? "That’s your best yet." : `Your best is ${best}.`} Open a tip below to read it again.`;
+  const ul = relatedButtons({ related: mg.picks.map((i) => TIPS[i].no) }, (k) => { $("matchDlg").close(); openDetail(k); });
+  $("mList").replaceChildren(...ul.childNodes);
+  $("mDoneHead").focus();
+}
+$("mBoard").addEventListener("click", (e) => { const b = e.target.closest(".mtile"); if (b) onMatchTile(b); });
+$("matchBtn").addEventListener("click", openMatch);
+$("mStart").addEventListener("click", startMatch);
+$("mAgain").addEventListener("click", startMatch);
+$("mFinish").addEventListener("click", () => $("matchDlg").close());
+$("mClose").addEventListener("click", () => $("matchDlg").close());
+$("matchDlg").addEventListener("close", () => { mg.busy = false; $("matchBtn").focus({ preventScroll: true }); });
+if (matchPool().length >= 4) $("matchBtn").hidden = false;
+if (/[?&]test=1\b/.test(location.search)) { window.__match = mg; window.__keyIdea = keyIdea; }
+
 /* ---------- Home screen app ---------- */
 let installPrompt = null;
 const standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
@@ -1856,6 +2021,7 @@ function applyUnlocks() {
   set($("quizBtn"), n < UNLOCK.quiz);
   set($("shakeBtn"), n < UNLOCK.shake);
   set($("botBtn"), n < UNLOCK.bot);
+  set($("matchBtn"), n < UNLOCK.match);
   set($("installRow"), n < UNLOCK.install);
   if (!n) { $("emptyState").hidden = false; $("count").hidden = true; $("table").hidden = true; $("empty").hidden = true; $("empty").textContent = ""; }
   // Say only what people can actually do on the page so far.

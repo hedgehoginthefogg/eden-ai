@@ -11,6 +11,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin) return;
+  if (request.destination === "video" || /\.(mp4|pdf)$/i.test(new URL(request.url).pathname)) return;
   event.respondWith(
     fetch(request)
       .then((response) => { const copy = response.clone(); caches.open(CACHE).then((cache) => cache.put(request, copy)); return response; })
