@@ -452,7 +452,7 @@ body.selecting .shakebtn { display: none; }
   </main>
 
   <footer class="foot">
-    <p>GenAI disclaimer: I (Steven Williams, AI and Education Specialist at the Eden Centre and Digital Skills Lab) designed this series and used Claude (Anthropic) to help build it. I’ve reviewed and edited every tip before posting it, and I take responsibility for any errors.</p>
+    <p>GenAI disclaimer: I (Steven Williams, AI and Education Specialist at the Eden Centre and Digital Skills Lab) designed this series and built it using Claude (Anthropic). I’ve reviewed and edited every tip before posting it, and I take responsibility for any errors.</p>
     <details class="process"><summary>How these tips were made</summary><p><strong>Planning.</strong> Outside of Claude, I brainstormed what I wanted, the audience, and the aim of the series: every tip should change how colleagues use chatbots or how they talk about them. After some initial tests in Claude, I decided on the themed collections, the weekly pattern and the house style.</p><p><strong>Drafting.</strong> I worked in a Claude Project that has access to a detailed work tracker I update every day, and Project Instructions that outline the learning principles which I believe are most relevant to GenAI-created resources. In a single chat inside the Project, using the Opus 5.5 model on High thinking, I gave Claude workshop materials I've created, articles I’ve written for the AI and Education Toolkit and activities I drafted for the new AI Fluency course. I asked Claude to extract possible tips from this content, with each including a “Try this” prompt, quiz question and game clue. I gave feedback on each draft, often several times, and manually rewrote, merged or deleted many cards along the way. For the LSE and News cards, I asked it to draw on my Work Tracker document, and include a “Why it matters” rather than “Try this” prompt.</p><p><strong>Pictures and code.</strong> Claude drew each card’s picture as code (SVG), following a style I set. It also wrote the code for the image maker that turns each tip into a card, for this page and its games, and for the trailer video, which is animated entirely in code.</p><p><strong>Checking.</strong> Each tip is marked “Drafted by Claude” until I’ve edited it and checked it against its sources. I only post cards I’ve marked “Edited and approved”.</p><p><strong>Questions or corrections:</strong> Steven Williams, <a href="mailto:s.williams10@lse.ac.uk">s.williams10@lse.ac.uk</a></p></details>
     <p>Tips and pictures by the Eden Centre, LSE, licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>. You’re welcome to share and adapt them with credit.</p>
     <p>Updated 2 Nov 2026.</p>
@@ -793,7 +793,22 @@ const state = { view: "date", openCat: null, shuffled: null, seed: 1, matches: T
 
 /* ---------- Search ---------- */
 const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[“”‘’"']/g, "");
-const HAY = TIPS.map((t) => norm([t.head, t.tip, t.try, t.why, t.cat, t.level, t.dateLabel, "tip " + t.no].join(" ")));
+/* Links written in Markdown, [link text](https://…), show as real links on the page and as
+   "link text (https://…)" wherever plain text is needed, such as a copied prompt. */
+const MD_LINK = /\[([^\]\n]+)\]\(((?:https?:\/\/|mailto:)[^\s)]+)\)/g;
+const plainOf = (text) => String(text || "").replace(MD_LINK, (m, label, url) => `${label} (${url.replace(/^mailto:/, "")})`);
+function richNodes(text) {
+  const out = []; const str = String(text || ""); let last = 0;
+  for (const m of str.matchAll(MD_LINK)) {
+    if (m.index > last) out.push(document.createTextNode(str.slice(last, m.index)));
+    const a = document.createElement("a"); a.href = m[2]; a.textContent = m[1];
+    if (!m[2].startsWith("mailto:")) { a.target = "_blank"; a.rel = "noopener"; const n = document.createElement("span"); n.className = "vh"; n.textContent = " (opens in a new tab)"; a.appendChild(n); }
+    out.push(a); last = m.index + m[0].length;
+  }
+  if (last < str.length) out.push(document.createTextNode(str.slice(last)));
+  return out;
+}
+const HAY = TIPS.map((t) => norm([t.head, plainOf(t.tip), plainOf(t.try), plainOf(t.why), t.cat, t.level, t.dateLabel, "tip " + t.no].join(" ")));
 function runSearch() {
   const terms = norm(q.value).split(/\s+/).filter(Boolean);
   state.matches = HAY.map((h) => terms.every((w) => h.includes(w)));
@@ -801,6 +816,7 @@ function runSearch() {
 
 /* ---------- Cards ---------- */
 function promptOf(text) {
+  text = plainOf(text);
   const found = Array.from(String(text || "").matchAll(/["“]([^"”]{8,})["”]/g)).map((m) => m[1]);
   return found.length ? found.sort((a, b) => b.length - a.length)[0] : null;
 }
@@ -1021,7 +1037,7 @@ function renderList(vis) {
       const body = document.createElement("div");
       const meta = document.createElement("p"); meta.className = "meta"; meta.textContent = `Tip ${t.no}. ${t.cat}. Posted ${t.dateLabel}.`;
       const h = document.createElement("h2"); h.textContent = t.head;
-      const tip = document.createElement("p"); tip.textContent = t.tip;
+      const tip = document.createElement("p"); tip.replaceChildren(...richNodes(t.tip));
       body.append(meta, h, tip);
       if (t.try) body.appendChild(tryBlock(t.try, t.head));
       if (t.why) { const w = document.createElement("p"); const s = document.createElement("strong"); s.textContent = `${whyLabel(t.cat)}: `; w.append(s, t.why); body.appendChild(w); }
@@ -1040,7 +1056,7 @@ function renderList(vis) {
 }
 function tryBlock(text, head) {
   const box = document.createElement("div"); box.className = "trybox";
-  const p = document.createElement("p"); const s = document.createElement("strong"); s.textContent = "Try this: "; p.append(s, text);
+  const p = document.createElement("p"); const s = document.createElement("strong"); s.textContent = "Try this: "; p.append(s, ...richNodes(text));
   box.appendChild(p);
   const prompt = promptOf(text);
   if (prompt) {
@@ -1105,12 +1121,12 @@ function openDetail(i) {
   $("dMeta").textContent = `Tip ${t.no}. ${t.cat}. Posted ${t.dateLabel}.`;
   $("dHead").textContent = t.head;
   $("dAlt").textContent = t.alt ? `Picture: ${t.alt}` : "";
-  $("dTip").textContent = t.tip;
-  $("dTryBox").hidden = !t.try; $("dTry").textContent = t.try || "";
+  $("dTip").replaceChildren(...richNodes(t.tip));
+  $("dTryBox").hidden = !t.try; $("dTry").replaceChildren(...richNodes(t.try));
   const prompt = promptOf(t.try);
   $("dCopy").hidden = !prompt; $("dCopy").textContent = "Copy prompt"; $("dCopy").classList.remove("done");
   $("dCopy").onclick = () => copyText(prompt, $("dCopy"), $("dStatus"));
-  $("dWhyHead").textContent = whyLabel(t.cat); $("dWhyBox").hidden = !t.why; $("dWhy").textContent = t.why || "";
+  $("dWhyHead").textContent = whyLabel(t.cat); $("dWhyBox").hidden = !t.why; $("dWhy").replaceChildren(...richNodes(t.why));
   $("dLink").replaceChildren(); if (t.link) $("dLink").replaceChildren(...linkPara(t.link, t.linkText).childNodes);
   const rel = relatedButtons(t, (k) => openDetail(k));
   $("dRel").replaceChildren(...rel.childNodes);
@@ -1497,7 +1513,7 @@ $("qPassGo").addEventListener("click", () => { quiz.turn++; showAsk(); });
 
 /* Split a model answer into the points a checker listens for. */
 function keyPoints(t) {
-  const src = (t.quizA && t.quizA.trim()) || t.tip || "";
+  const src = (t.quizA && t.quizA.trim()) || plainOf(t.tip) || "";
   return src.replace(/([.!?])\s+(?=[A-Z‘'“"(])/g, "$1\u0001").replace(/;\s+/g, ";\u0001").split("\u0001")
     .map((p) => p.trim()).filter((p) => p.length > 2);
 }
@@ -1513,8 +1529,8 @@ function showCheck() {
   $("qPoints").innerHTML = pts.map((p, k) => `<li><label><input type="checkbox" data-k="${k}"> <span>${escapeHtml(p)}</span></label></li>`).join("");
   $("qCheckHint").textContent = `Tell them the category (${t.cat}), or the card’s headline: “${t.head}”.`;
   $("qCheckFace").innerHTML = faceCopy(t, "c");
-  $("qCheckTip").textContent = t.tip;
-  $("qCheckWhyLab").textContent = `${whyLabel(t.cat)}:`; $("qCheckWhyBox").hidden = !t.why; $("qCheckWhy").textContent = t.why || "";
+  $("qCheckTip").replaceChildren(...richNodes(t.tip));
+  $("qCheckWhyLab").textContent = `${whyLabel(t.cat)}:`; $("qCheckWhyBox").hidden = !t.why; $("qCheckWhy").replaceChildren(...richNodes(t.why));
   $("qCheckCard").open = false;
   updateVerdictHint();
   $("qCheckNext").textContent = quiz.pos < quiz.list.length - 1 ? "Next card" : "See how you did";
@@ -1563,9 +1579,9 @@ function showReveal() {
   $("qModelBox").hidden = !(t.quizA && t.quizA.trim()); $("qModel").textContent = t.quizA || "";
   $("qFace").innerHTML = faceCopy(t, "q");
   $("qAlt").textContent = t.alt ? `Picture: ${t.alt}` : "";
-  $("qTip").textContent = t.tip;
-  $("qTryBox").hidden = !t.try; $("qTry").textContent = t.try || "";
-  $("qWhyLab").textContent = `${whyLabel(t.cat)}:`; $("qWhyBox").hidden = !t.why; $("qWhy").textContent = t.why || "";
+  $("qTip").replaceChildren(...richNodes(t.tip));
+  $("qTryBox").hidden = !t.try; $("qTry").replaceChildren(...richNodes(t.try));
+  $("qWhyLab").textContent = `${whyLabel(t.cat)}:`; $("qWhyBox").hidden = !t.why; $("qWhy").replaceChildren(...richNodes(t.why));
   $("qDiscuss").hidden = !twoPlayer();
   $("qNext").hidden = true;
   $("qShowHead").focus();
@@ -1774,8 +1790,8 @@ function clueFor(t) {
   if (t.quizQ) kinds.push(`I’m hiding under the card that answers this: “${t.quizQ}”`);
   const prompt = promptOf(t.try);
   if (prompt && prompt.length <= 240) kinds.push(`I’m hiding under the card that suggests you try: “${prompt}”`);
-  if (t.why) kinds.push(`I’m hiding under the card that says this works because ${lowerFirst(t.why.trim()).replace(/[.!?]+$/, "")}.`);
-  if (!kinds.length) kinds.push(`I’m hiding under the card that says: “${t.tip}”`);
+  if (t.why) kinds.push(`I’m hiding under the card that says this works because ${lowerFirst(plainOf(t.why).trim()).replace(/[.!?]+$/, "")}.`);
+  if (!kinds.length) kinds.push(`I’m hiding under the card that says: “${plainOf(t.tip)}”`);
   bot.clueKind = (bot.clueKind + 1) % 3;
   return kinds[bot.clueKind % kinds.length];
 }
