@@ -149,7 +149,7 @@ dialog[open] { animation: lift 260ms cubic-bezier(0.2, 0.75, 0.2, 1); }
 dialog::backdrop { background: rgba(10, 14, 20, 0.55); }
 @keyframes lift { from { opacity: 0; transform: translateY(18px) scale(0.97); } to { opacity: 1; transform: none; } }
 .dwrap { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: 1.6rem; padding: 1.5rem; }
-@media (max-width: 760px) { .dwrap { grid-template-columns: 1fr; padding: 1rem; } .dface { max-width: 420px; } }
+@media (max-width: 760px) { .dwrap { grid-template-columns: 1fr; padding: 1rem; } .dmedia { max-width: 420px; } }
 .dface > svg { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 6px 18px rgba(12, 18, 28, 0.18); }
 .dtext h2 { font-family: "Newsreader", Georgia, serif; font-weight: 600; font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.15; margin: 0.2rem 0 0.8rem; }
 .dtext h3 { font-size: 1rem; margin: 1rem 0 0.3rem; }
@@ -372,10 +372,16 @@ body.selecting .shakebtn { display: none; }
   .card, .table, .pilelabel, .card .face, .card .date { transition: none !important; }
   dialog[open] { animation: none; }
 }
+#dVideoBox video { width: 100%; height: auto; border-radius: 6px; background: #1D2533; display: block; box-shadow: 0 6px 18px rgba(12, 18, 28, 0.18); }
+#dVideoBox video.vertical { width: auto; max-width: 100%; max-height: 75vh; margin: 0 auto; }
+#dVideoTextBox { margin: 0.6rem 0 0; }
 .foot details.process { margin: 0.4rem 0 1rem; }
 .foot details.process summary { cursor: pointer; font-weight: 700; padding: 0.6rem 0; }
 .foot details.process p { max-width: 70ch; }
 .trailer { margin: 0.5rem 0 1.75rem; }
+.trailer.collapsed { margin: 0 0 1rem; }
+.trailer-toggle { font: inherit; font-size: 1rem; font-weight: 700; background: none; border: 0; padding: 0.3rem 0; color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 44px; }
+.trailer-toggle:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .trailer h2 { font-size: 1.3rem; margin: 0 0 0.6rem; }
 .trailerrow { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: flex-start; }
 .trailer video { width: min(360px, 100%); height: auto; border-radius: 8px; background: #1D2533; }
@@ -399,9 +405,9 @@ body.selecting .shakebtn { display: none; }
   </header>
 
   <section class="trailer" aria-labelledby="trailerHead">
-    <h2 id="trailerHead">Watch the trailer</h2>
-    <div class="trailerrow">
-      <video controls preload="metadata" playsinline poster="trailer-poster.jpg" width="360" height="360" aria-describedby="trailerNote"><source src="genai-tips-trailer.mp4" type="video/mp4"><a href="genai-tips-trailer.mp4">Download the trailer video (MP4)</a></video>
+    <h2 id="trailerHead"><span class="trailer-title">Watch the trailer</span><button type="button" class="trailer-toggle" id="trailerToggle" aria-expanded="false" aria-controls="trailerRow" hidden>▶ Watch the 36-second trailer</button></h2>
+    <div class="trailerrow" id="trailerRow">
+      <video controls preload="metadata" playsinline poster="videos/trailer-poster.jpg" width="360" height="360" aria-describedby="trailerNote"><source src="videos/genai-tips-trailer.mp4" type="video/mp4"><a href="videos/genai-tips-trailer.mp4">Download the trailer video (MP4)</a></video>
       <div class="trailertext">
         <p id="trailerNote">A 36-second introduction to the series. It has no sound, and its captions are part of the picture.</p>
         <details class="transcript"><summary>Read a description of the video</summary><h3>Scene 1: Opening</h3><p class="when">0:00 to 0:04</p><p>A wooden catalogue drawer labelled “GenAI tips” slides up into view, with the tops of coloured tip cards showing inside it.</p><p>The title types out above the drawer, letter by letter: “Working with GenAI in 2026/27”.</p><p><strong>Caption:</strong> “A new series for the AI and Education channel”</p><h3>Scene 2: The first card</h3><p class="when">0:04 to 0:08</p><p>The drawer rattles, and the first tip card rises out of it: “GenAI tip 1: Your chatbot has a computer”.</p><p>The card’s picture shows a chatbot connected to four tools: Search the web, Run code, Make files and Analyse data.</p><p><strong>Caption:</strong> “Short, practical GenAI tips, one every weekday”</p><h3>Scene 3: Themed collections</h3><p class="when">0:08 to 0:13</p><p>The drawer drops away and the first card moves to the centre.</p><p>Cards in different colours fan out behind it, one for each themed collection. Only the first card shows its collection name, “How chatbots work now”.</p><p><strong>Caption:</strong> “Tips come in themed collections, starting with How chatbots work now”</p><h3>Scene 4: A week of tips</h3><p class="when">0:13 to 0:18</p><p>The fan folds away and five cards slide into a row, with the days of the week typed above them. The Tuesday and Thursday cards lift up and are labelled “AI at LSE” and “In the news”.</p><table class="ttable"><caption class="vh">The five cards in the week</caption><thead><tr><th scope="col">Day</th><th scope="col">Tip card</th><th scope="col">Type</th></tr></thead><tbody><tr><td>Monday</td><td>Your chatbot has a computer</td><td>How chatbots work now</td></tr><tr><td>Tuesday</td><td>What’s new with Claude Artifacts?</td><td>AI at LSE</td></tr><tr><td>Wednesday</td><td>Name the tool you want it to use</td><td>How chatbots work now</td></tr><tr><td>Thursday</td><td>Experts followed their AI agent’s suggestions</td><td>In the news</td></tr><tr><td>Friday</td><td>Chatbots reward expertise</td><td>How chatbots work now</td></tr></tbody></table><p><strong>Caption:</strong> “Three bite-sized tips a week, plus an AI at LSE update and a news story”</p><h3>Scene 5: Try this</h3><p class="when">0:18 to 0:23</p><p>The other cards fade, and Friday’s card, “Chatbots reward expertise”, grows to fill the screen and flips over.</p><p>The back of the card is headed “GenAI tip 5 · Try this” and shows a prompt: “Using the attached course syllabus and my blog post on formative assessment, suggest three dialogic feedback activities for this course.” A “Copy prompt” button pulses once.</p><p><strong>Caption:</strong> “Every card has a prompt to try in Claude or Copilot”</p><h3>Scene 6: The collection</h3><p class="when">0:23 to 0:28</p><p>A search box and a “Quiz yourself” button fade in, and twelve tip cards deal up from the bottom of the screen into a grid, one at a time, in a mix of collection colours.</p><p>The twelve cards in the grid are:</p><ul><li>Your chatbot has a computer</li><li>Ask for evidence, not agreement</li><li>Show it an example</li><li>Keep your master copy outside the chatbot</li><li>Position 1 needs a spell-checker decision</li><li>Every chat is a role-play</li><li>Find themes in free-text comments</li><li>Experts followed their AI agent’s suggestions</li><li>Training vs prompting</li><li>Share a link that stays up to date</li><li>Observed assessment continues in 2026/27</li><li>Make a GIF for your slides</li></ul><p><strong>Caption:</strong> “Every tip collected on one page, with a quiz to test yourself”</p><h3>Scene 7: Games</h3><p class="when">0:28 to 0:31</p><p>The tip card “Agent: a model that works in steps” appears in the centre. A small robot, the rogue bot from the tips page game, rises from behind it, wobbles and says “Found me!”.</p><p><strong>Caption:</strong> “…and a few games along the way”</p><h3>Scene 8: End card</h3><p class="when">0:31 to 0:36</p><p>Everything slides away and an end card drops in, then stays still for the rest of the video.</p><p>The end card reads: “Starts today. Working with GenAI in 2026/27. In the AI and Education channel, every weekday. Every tip in one place: tinyurl.com/edenaitips”. It also shows a QR code that opens the same address.</p></details>
@@ -455,13 +461,19 @@ body.selecting .shakebtn { display: none; }
     <p>GenAI disclaimer: I (Steven Williams, AI and Education Specialist at the Eden Centre and Digital Skills Lab) designed this series and built it using Claude (Anthropic). I’ve reviewed and edited every tip before posting it, and I take responsibility for any errors.</p>
     <details class="process"><summary>How these tips were made</summary><p><strong>Planning.</strong> Outside of Claude, I brainstormed what I wanted, the audience, and the aim of the series: every tip should change how colleagues use chatbots or how they talk about them. After some initial tests in Claude, I decided on the themed collections, the weekly pattern and the house style.</p><p><strong>Drafting.</strong> I worked in a Claude Project that has access to a detailed work tracker I update every day, and Project Instructions that outline the learning principles which I believe are most relevant to GenAI-created resources. In a single chat inside the Project, using the Opus 5.5 model on High thinking, I gave Claude workshop materials I've created, articles I’ve written for the AI and Education Toolkit and activities I drafted for the new AI Fluency course. I asked Claude to extract possible tips from this content, with each including a “Try this” prompt, quiz question and game clue. I gave feedback on each draft, often several times, and manually rewrote, merged or deleted many cards along the way. For the LSE and News cards, I asked it to draw on my Work Tracker document, and include a “Why it matters” rather than “Try this” prompt.</p><p><strong>Pictures and code.</strong> Claude drew each card’s picture as code (SVG), following a style I set. It also wrote the code for the image maker that turns each tip into a card, for this page and its games, and for the trailer video, which is animated entirely in code.</p><p><strong>Checking.</strong> Each tip is marked “Drafted by Claude” until I’ve edited it and checked it against its sources. I only post cards I’ve marked “Edited and approved”.</p><p><strong>Questions or corrections:</strong> Steven Williams, <a href="mailto:s.williams10@lse.ac.uk">s.williams10@lse.ac.uk</a></p></details>
     <p>Tips and pictures by the Eden Centre, LSE, licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>. You’re welcome to share and adapt them with credit.</p>
-    <p>Updated 2 Nov 2026.</p>
+    <p>Updated 5 Nov 2026.</p>
   </footer>
 </div>
 
 <dialog id="detail" aria-labelledby="dHead">
   <div class="dwrap">
-    <div class="dface" id="dFace" aria-hidden="true"></div>
+    <div class="dmedia">
+      <div class="dface" id="dFace" aria-hidden="true"></div>
+      <div id="dVideoBox" hidden>
+        <video id="dVideo" controls preload="metadata" playsinline></video>
+        <p id="dVideoTextBox" hidden><a id="dVideoText">Read a text version of the video</a> (PDF)</p>
+      </div>
+    </div>
     <div class="dtext">
       <p class="meta" id="dMeta"></p>
       <h2 id="dHead"></h2>
@@ -773,11 +785,24 @@ body.selecting .shakebtn { display: none; }
   </div>
 </dialog>
 
-<script type="application/json" id="data">[]</script>
+<script type="application/json" id="data">[{"related":[],"accent":"#2A64A8","tint":"#D7E5F3","botClues":["I’m hiding under the card about the tools around a model, like search and code, that make up for its weaknesses."],"no":1,"date":"2026-11-09","dateLabel":"9 Nov 2026","cat":"How chatbots work now","level":"1 – Foundations","head":"Your chatbot has a computer","tip":"Chatbots are no longer just large language models! One of the biggest changes since ChatGPT first launched is that chatbots like Claude and Copilot are now a language model inside a 'harness' of software and tools, including web search and often a cloud computer that can run code and test and fix its outputs before presenting them to the user. This means today's chatbots can do things like create mp4 videos (like the trailer for this series) entirely from code!","try":"To understand the importance of the 'harness' over the language model, pick Claude Opus 5.5 in both Claude and Copilot, then give each the same request: \"Make a 20-second animated video about [topic of your choice] as an mp4 file I can download. Check it plays correctly before you share it.\" Compare what you get back: same model, different harness.","why":"Placing language models in a 'harness' with other tools addresses their inherent weaknesses: language models predict answers, so they can vary from one try to the next; code is deterministic, giving the same result every time. Having access to a cloud computer also allow chatbots to do more useful things, like create .mp4 videos, or build a website, load it in a browser and click around to test it like a human would! With the same model in two products, any difference in the result comes from the harness: the tools, computer and checking steps each product gives it. Note: normally asking LLMs about themselves is a bad idea – they don't have insight into their own workings. However, they normally have information about their tools and computing environment, as they need this to operate!","alt":"Diagram of a chatbot connected to four tools: web search, running code, making files and analysing data.","quizQ":"What is a chatbot's 'harness', and what does it add to the language model inside it?","quizA":"The software and tools built around the language model, including web search and often a cloud computer that can run code. Tools make up for the model's weaknesses, for example code gives exact, repeatable results, and let chatbots do more, such as make documents, slides and learning resources.","link":"https://lsecloud.sharepoint.com/sites/DSLLearningHub/SitePages/Create-a-visual-explainer-with-code.aspx","linkText":"Learn how to use Claude to create visual explainers, like the tip cards and videos from this series","video":"genai-tip-1-your-chatbot-has-a-computer.mp4","videoVertical":"genai-tip-1-your-chatbot-has-a-computer-vertical.mp4","videoThumb":"genai-tip-1-thumbnail.png","videoVerticalThumb":"genai-tip-1-thumbnail-vertical.png","videoCaptions":"genai-tip-1-captions.vtt","videoVerticalCaptions":"","videoText":"genai-tip-1-text-version.pdf","face":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"1080\" height=\"1080\" viewBox=\"0 0 1080 1080\">\u003cdefs>\u003cclipPath id=\"t1-clip\">\u003crect width=\"1080\" height=\"1080\" rx=\"20\"/>\u003c/clipPath>\u003cmask id=\"t1-hole\" maskUnits=\"userSpaceOnUse\" x=\"-40\" y=\"-40\" width=\"1160\" height=\"1160\">\u003crect x=\"-40\" y=\"-40\" width=\"1160\" height=\"1160\" fill=\"#fff\"/>\u003ccircle cx=\"540\" cy=\"1046\" r=\"15\" fill=\"#000\"/>\u003c/mask>\u003cradialGradient id=\"t1-age\" cx=\"50%\" cy=\"46%\" r=\"72%\">\u003cstop offset=\"58%\" stop-color=\"#5A4630\" stop-opacity=\"0\"/>\u003cstop offset=\"100%\" stop-color=\"#5A4630\" stop-opacity=\"0.13\"/>\u003c/radialGradient>\u003c/defs>\u003cg mask=\"url(#t1-hole)\" clip-path=\"url(#t1-clip)\">\u003crect width=\"1080\" height=\"1080\" fill=\"#D7E5F3\"/>\u003crect width=\"1080\" height=\"1080\" fill=\"url(#cardgrain)\"/>\u003crect width=\"1080\" height=\"1080\" fill=\"url(#t1-age)\"/>\u003ctext x=\"64\" y=\"96\" font-family=\"Courier Prime\" font-weight=\"700\" font-size=\"36\" fill=\"#1D2533\">GenAI tip 1\u003c/text>\u003crect x=\"593\" y=\"58\" width=\"423\" height=\"52\" rx=\"26\" fill=\"#1D2533\"/>\u003cg transform=\"translate(615 69)\">\u003cpath d=\"M3 2.5 H13.5 L28.5 17.5 L17.5 28.5 L2.5 13.5 V3 Z\" fill=\"#FFFFFF\" stroke=\"#FFFFFF\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\u003ccircle cx=\"8.6\" cy=\"8.6\" r=\"3\" fill=\"#1D2533\"/>\u003c/g>\u003ctext x=\"992\" y=\"95\" text-anchor=\"end\" font-family=\"Atkinson Hyperlegible\" font-weight=\"700\" font-size=\"30\" fill=\"#FFFFFF\">How chatbots work now\u003c/text>\u003cline x1=\"0\" y1=\"128\" x2=\"1080\" y2=\"128\" stroke=\"#A8261D\" stroke-opacity=\"0.85\" stroke-width=\"3.5\"/>\u003cline x1=\"0\" y1=\"259\" x2=\"1080\" y2=\"259\" stroke=\"#5E7FAE\" stroke-opacity=\"0.38\" stroke-width=\"2\"/>\u003ctext x=\"64\" y=\"253\" font-family=\"Newsreader\" font-weight=\"600\" font-size=\"108\" fill=\"#1D2533\">Your chatbot has a\u003c/text>\u003cline x1=\"0\" y1=\"384\" x2=\"1080\" y2=\"384\" stroke=\"#5E7FAE\" stroke-opacity=\"0.38\" stroke-width=\"2\"/>\u003ctext x=\"64\" y=\"378\" font-family=\"Newsreader\" font-weight=\"600\" font-size=\"108\" fill=\"#1D2533\">computer\u003c/text>\u003crect x=\"64\" y=\"420\" width=\"952\" height=\"560\" rx=\"5\" fill=\"#FFFEFA\" stroke=\"#1D2533\" stroke-opacity=\"0.88\" stroke-width=\"2.5\"/>\u003csvg x=\"68\" y=\"424\" width=\"944\" height=\"552\" viewBox=\"0 0 960 560\" preserveAspectRatio=\"xMidYMid meet\">\n  \u003cg stroke=\"#555E6E\" stroke-width=\"5\" stroke-linecap=\"round\">\n    \u003cline x1=\"480\" y1=\"270\" x2=\"190\" y2=\"150\"/>\n    \u003cline x1=\"480\" y1=\"270\" x2=\"770\" y2=\"150\"/>\n    \u003cline x1=\"480\" y1=\"270\" x2=\"190\" y2=\"390\"/>\n    \u003cline x1=\"480\" y1=\"270\" x2=\"770\" y2=\"390\"/>\n  \u003c/g>\n  \u003cpath d=\"M430 212 H530 A30 30 0 0 1 560 242 V294 A30 30 0 0 1 530 324 H466 L428 354 L436 324 H430 A30 30 0 0 1 400 294 V242 A30 30 0 0 1 430 212 Z\" fill=\"#2A64A8\" stroke=\"#1D2533\" stroke-width=\"5\" stroke-linejoin=\"round\"/>\n  \u003ccircle cx=\"444\" cy=\"268\" r=\"11\" fill=\"#FFFFFF\"/>\n  \u003ccircle cx=\"480\" cy=\"268\" r=\"11\" fill=\"#FFFFFF\"/>\n  \u003ccircle cx=\"516\" cy=\"268\" r=\"11\" fill=\"#FFFFFF\"/>\n  \u003cg fill=\"#D7E5F3\" stroke=\"#1D2533\" stroke-width=\"5\">\n    \u003ccircle cx=\"190\" cy=\"150\" r=\"60\"/>\n    \u003ccircle cx=\"770\" cy=\"150\" r=\"60\"/>\n    \u003ccircle cx=\"190\" cy=\"390\" r=\"60\"/>\n    \u003ccircle cx=\"770\" cy=\"390\" r=\"60\"/>\n  \u003c/g>\n  \u003ccircle cx=\"180\" cy=\"140\" r=\"22\" fill=\"#FFFFFF\" stroke=\"#1D2533\" stroke-width=\"6\"/>\n  \u003cline x1=\"196\" y1=\"156\" x2=\"216\" y2=\"176\" stroke=\"#1D2533\" stroke-width=\"9\" stroke-linecap=\"round\"/>\n  \u003crect x=\"732\" y=\"118\" width=\"76\" height=\"62\" rx=\"9\" fill=\"#1D2533\"/>\n  \u003cpath d=\"M748 136 L762 149 L748 162\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  \u003cline x1=\"770\" y1=\"164\" x2=\"790\" y2=\"164\" stroke=\"#FFFFFF\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n  \u003cpath d=\"M168 356 H202 L216 370 V424 H168 Z\" fill=\"#FFFFFF\" stroke=\"#1D2533\" stroke-width=\"5\" stroke-linejoin=\"round\"/>\n  \u003cpath d=\"M202 356 V370 H216\" fill=\"none\" stroke=\"#1D2533\" stroke-width=\"4\" stroke-linejoin=\"round\"/>\n  \u003cg stroke=\"#1D2533\" stroke-width=\"4\" stroke-linecap=\"round\">\u003cline x1=\"178\" y1=\"386\" x2=\"206\" y2=\"386\"/>\u003cline x1=\"178\" y1=\"399\" x2=\"206\" y2=\"399\"/>\u003cline x1=\"178\" y1=\"412\" x2=\"196\" y2=\"412\"/>\u003c/g>\n  \u003cg fill=\"#2A64A8\" stroke=\"#1D2533\" stroke-width=\"3\">\u003crect x=\"744\" y=\"396\" width=\"15\" height=\"26\"/>\u003crect x=\"763\" y=\"378\" width=\"15\" height=\"44\"/>\u003crect x=\"782\" y=\"362\" width=\"15\" height=\"60\"/>\u003c/g>\n  \u003cline x1=\"736\" y1=\"424\" x2=\"806\" y2=\"424\" stroke=\"#1D2533\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n  \u003cg font-family=\"Atkinson Hyperlegible\" font-size=\"34\" fill=\"#1D2533\" text-anchor=\"middle\">\n    \u003ctext x=\"190\" y=\"256\" font-family=\"Atkinson Hyperlegible\">Search the web\u003c/text>\n    \u003ctext x=\"770\" y=\"256\" font-family=\"Atkinson Hyperlegible\">Run code\u003c/text>\n    \u003ctext x=\"190\" y=\"496\" font-family=\"Atkinson Hyperlegible\">Make files\u003c/text>\n    \u003ctext x=\"770\" y=\"496\" font-family=\"Atkinson Hyperlegible\">Analyse data\u003c/text>\n  \u003c/g>\n\u003c/svg>\u003ctext x=\"64\" y=\"1042\" font-family=\"Courier Prime\" font-weight=\"400\" font-size=\"25\" fill=\"#1D2533\" fill-opacity=\"0.86\">Eden Centre AI and Education\u003c/text>\u003ccircle cx=\"540\" cy=\"1046\" r=\"16.5\" fill=\"none\" stroke=\"#5A4630\" stroke-opacity=\"0.35\" stroke-width=\"2\"/>\u003crect x=\"1\" y=\"1\" width=\"1078\" height=\"1078\" rx=\"19\" fill=\"none\" stroke=\"#5A4630\" stroke-opacity=\"0.22\" stroke-width=\"2\"/>\u003c/g>\u003c/svg>"}]</script>
 <script>
 (function () {
 "use strict";
 const TIPS = JSON.parse(document.getElementById("data").textContent);
+/* Once the first week is complete (six or more tips posted), the trailer shrinks to a one-line link. */
+(function () {
+  const sec = document.querySelector(".trailer"); if (!sec) return;
+  if (TIPS.length < 6) return;
+  const btn = document.getElementById("trailerToggle"), row = document.getElementById("trailerRow");
+  sec.classList.add("collapsed"); sec.querySelector(".trailer-title").hidden = true; btn.hidden = false; row.hidden = true;
+  btn.addEventListener("click", () => {
+    const open = row.hidden; row.hidden = !open; btn.setAttribute("aria-expanded", String(open));
+    btn.textContent = open ? "▼ Hide the trailer" : "▶ Watch the 36-second trailer";
+    const v = row.querySelector("video"); if (!open && v) { try { v.pause(); } catch (e) { /* ignore */ } }
+    if (open && v) v.focus();
+  });
+})();
 /* How many posted tips each feature needs before it appears. */
 const UNLOCK = { install: 1, quiz: 5, shake: 5, views: 6, match: 6, bot: 8, search: 10 };
 const whyLabel = (cat) => ["Critical AI literacy", "In the news", "AI at LSE"].includes(cat) ? "Why it matters" : "Why it works";
@@ -1067,6 +1092,45 @@ function tryBlock(text, head) {
   }
   return box;
 }
+/* Videos sit in the repository's videos folder; the card only stores file names. A card can have a
+   horizontal and a vertical version: the vertical one plays when the screen is taller than it is wide. */
+const portrait = window.matchMedia("(orientation: portrait)");
+let videoTip = null;
+function pickVideo(t) {
+  if (t.video && t.videoVertical) return portrait.matches ? t.videoVertical : t.video;
+  return t.video || t.videoVertical || "";
+}
+function setVideo(t, keepTime) {
+  const v = $("dVideo"), box = $("dVideoBox");
+  const file = pickVideo(t), at = keepTime ? v.currentTime : 0;
+  try { v.pause(); } catch (e) { /* ignore */ }
+  v.replaceChildren(); v.removeAttribute("src"); v.removeAttribute("poster");
+  videoTip = file ? t : null;
+  box.hidden = !file; $("dFace").hidden = !!file;
+  if (!file) { v.load && v.load(); return; }
+  const vertical = file === t.videoVertical;
+  v.classList.toggle("vertical", vertical);
+  const thumb = vertical ? t.videoVerticalThumb : t.videoThumb;
+  if (thumb) v.poster = "videos/" + encodeURIComponent(thumb);
+  const src = document.createElement("source");
+  // Without a thumbnail, start at 0.1 seconds so browsers show the first frame (the card) instead of a blank box.
+  src.src = "videos/" + encodeURIComponent(file) + (thumb ? "" : "#t=0.1");
+  src.type = /\.webm$/i.test(file) ? "video/webm" : "video/mp4";
+  v.appendChild(src);
+  const caps = vertical ? (t.videoVerticalCaptions || t.videoCaptions) : t.videoCaptions;
+  if (caps) { const tr = document.createElement("track"); tr.kind = "captions"; tr.srclang = "en-GB"; tr.label = "English"; tr.src = "videos/" + encodeURIComponent(caps); tr.default = true; v.appendChild(tr); }
+  const a = document.createElement("a"); a.href = "videos/" + encodeURIComponent(file); a.textContent = "Download the video"; v.appendChild(a);
+  v.setAttribute("aria-label", `Video: ${t.head}`);
+  $("dVideoTextBox").hidden = !t.videoText;
+  if (t.videoText) $("dVideoText").href = "videos/" + encodeURIComponent(t.videoText); else $("dVideoText").removeAttribute("href");
+  v.load && v.load();
+  if (at) v.addEventListener("loadedmetadata", () => { try { v.currentTime = at; } catch (e) { /* ignore */ } }, { once: true });
+}
+// Swap versions when a phone is turned, but never in the middle of playback.
+portrait.addEventListener && portrait.addEventListener("change", () => {
+  const v = $("dVideo");
+  if (videoTip && videoTip.video && videoTip.videoVertical && v.paused) setVideo(videoTip, true);
+});
 function linkPara(url, text) {
   const p = document.createElement("p"); const a = document.createElement("a");
   let host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) {}
@@ -1128,6 +1192,7 @@ function openDetail(i) {
   $("dCopy").onclick = () => copyText(prompt, $("dCopy"), $("dStatus"));
   $("dWhyHead").textContent = whyLabel(t.cat); $("dWhyBox").hidden = !t.why; $("dWhy").replaceChildren(...richNodes(t.why));
   $("dLink").replaceChildren(); if (t.link) $("dLink").replaceChildren(...linkPara(t.link, t.linkText).childNodes);
+  setVideo(t);
   const rel = relatedButtons(t, (k) => openDetail(k));
   $("dRel").replaceChildren(...rel.childNodes);
   $("dRelBox").hidden = !$("dRel").children.length;
@@ -1144,6 +1209,7 @@ function openDetail(i) {
 $("dClose").addEventListener("click", () => dlg.close());
 dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
 dlg.addEventListener("close", () => {
+  try { $("dVideo").pause(); } catch (e) { /* ignore */ }
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* ignore */ }
   const back = current != null && !cards[current].classList.contains("gone") && state.view !== "list" ? cards[current] : opener;
   if (back && back.focus) back.focus({ preventScroll: false });
