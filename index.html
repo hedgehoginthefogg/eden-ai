@@ -481,7 +481,9 @@ body.selecting .shakebtn { display: none; }
       <p id="dTip"></p>
       <div id="dTryBox">
         <h3>Try this</h3>
+        <p id="dTryBefore" hidden></p>
         <div class="trybox"><p id="dTry"></p><button type="button" class="copybtn" id="dCopy">Copy prompt</button></div>
+        <p id="dTryAfter" hidden></p>
       </div>
       <div id="dWhyBox"><h3 id="dWhyHead">Why it works</h3><p id="dWhy"></p></div>
       <p id="dLink"></p>
@@ -840,6 +842,14 @@ function runSearch() {
 }
 
 /* ---------- Cards ---------- */
+/* Splits a "Try this" into the instructions around it and the prompt itself (the longest quoted
+   passage), so the prompt can sit in its own box with the copy button. */
+function splitTry(text) {
+  const str = String(text || ""); let best = null;
+  for (const m of str.matchAll(/[“"]([^"”]{8,})[”"]/g)) if (!best || m[1].length > best[1].length) best = m;
+  if (!best) return { before: "", prompt: "", after: "", all: str };
+  return { before: str.slice(0, best.index).trim().replace(/[:,]\s*$/, ":"), prompt: best[1].trim(), after: str.slice(best.index + best[0].length).trim().replace(/^[.,;]\s*/, ""), all: str };
+}
 function promptOf(text) {
   text = plainOf(text);
   const found = Array.from(String(text || "").matchAll(/["“]([^"”]{8,})["”]/g)).map((m) => m[1]);
@@ -1080,17 +1090,25 @@ function renderList(vis) {
   listItems.querySelectorAll(":scope > li").forEach((li) => { li.hidden = !on.has(Number(li.dataset.i)); });
 }
 function tryBlock(text, head) {
+  const wrap = document.createElement("div");
+  const parts = splitTry(text);
+  const lead = document.createElement("p"); const s = document.createElement("strong"); s.textContent = "Try this: ";
   const box = document.createElement("div"); box.className = "trybox";
-  const p = document.createElement("p"); const s = document.createElement("strong"); s.textContent = "Try this: "; p.append(s, ...richNodes(text));
-  box.appendChild(p);
-  const prompt = promptOf(text);
+  const p = document.createElement("p");
+  if (parts.prompt) {
+    if (parts.before) lead.append(s, ...richNodes(parts.before)); else { s.textContent = "Try this prompt:"; lead.append(s); }
+    wrap.appendChild(lead);
+    p.append(...richNodes(parts.prompt)); box.appendChild(p); wrap.appendChild(box);
+    if (parts.after) { const a = document.createElement("p"); a.append(...richNodes(parts.after)); wrap.appendChild(a); }
+  } else { p.append(s, ...richNodes(text)); box.appendChild(p); wrap.appendChild(box); }
+  const prompt = parts.prompt ? plainOf(parts.prompt) : null;
   if (prompt) {
     const btn = document.createElement("button"); btn.type = "button"; btn.className = "copybtn"; btn.textContent = "Copy prompt";
     btn.setAttribute("aria-label", `Copy the prompt for ${head}`);
     btn.addEventListener("click", () => copyText(prompt, btn, count));
     box.appendChild(btn);
   }
-  return box;
+  return wrap;
 }
 /* Videos sit in the repository's videos folder; the card only stores file names. A card can have a
    horizontal and a vertical version: the vertical one plays when the screen is taller than it is wide. */
@@ -1186,8 +1204,12 @@ function openDetail(i) {
   $("dHead").textContent = t.head;
   $("dAlt").textContent = t.alt ? `Picture: ${t.alt}` : "";
   $("dTip").replaceChildren(...richNodes(t.tip));
-  $("dTryBox").hidden = !t.try; $("dTry").replaceChildren(...richNodes(t.try));
-  const prompt = promptOf(t.try);
+  $("dTryBox").hidden = !t.try;
+  const tp = splitTry(t.try);
+  $("dTryBefore").hidden = !(tp.prompt && tp.before); $("dTryBefore").replaceChildren(...richNodes(tp.prompt ? tp.before : ""));
+  $("dTry").replaceChildren(...richNodes(tp.prompt || t.try || ""));
+  $("dTryAfter").hidden = !(tp.prompt && tp.after); $("dTryAfter").replaceChildren(...richNodes(tp.prompt ? tp.after : ""));
+  const prompt = tp.prompt ? plainOf(tp.prompt) : null;
   $("dCopy").hidden = !prompt; $("dCopy").textContent = "Copy prompt"; $("dCopy").classList.remove("done");
   $("dCopy").onclick = () => copyText(prompt, $("dCopy"), $("dStatus"));
   $("dWhyHead").textContent = whyLabel(t.cat); $("dWhyBox").hidden = !t.why; $("dWhy").replaceChildren(...richNodes(t.why));
