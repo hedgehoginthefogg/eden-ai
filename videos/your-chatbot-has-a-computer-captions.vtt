@@ -1,101 +1,101 @@
 WEBVTT
 
 1
-00:00:00.000 --> 00:00:03.850
-GenAI tip 1: Your chatbot has a computer.
+00:00:01.140 --> 00:00:03.130
+Your chatbot has a computer.
 
 2
-00:00:04.130 --> 00:00:08.790
+00:00:03.410 --> 00:00:08.070
 When ChatGPT first launched,
 a chatbot was just a large language model.
 
 3
-00:00:08.840 --> 00:00:11.610
+00:00:08.120 --> 00:00:10.890
 You typed text in, and it wrote text back.
 
 4
-00:00:11.880 --> 00:00:17.120
+00:00:11.160 --> 00:00:16.400
 Today, chatbots like Claude and Copilot
 put the language model inside a harness
 
 5
-00:00:17.160 --> 00:00:20.300
+00:00:16.440 --> 00:00:19.580
 of software and tools
 that includes web search
 
 6
-00:00:20.340 --> 00:00:22.810
+00:00:19.620 --> 00:00:22.090
 and often a computer in the cloud,
 
 7
-00:00:22.850 --> 00:00:26.730
+00:00:22.130 --> 00:00:26.010
 where it can run code,
 make files and analyse data.
 
 8
-00:00:27.190 --> 00:00:29.560
+00:00:26.470 --> 00:00:28.840
 Depending on how sophisticated
 the harness is,
 
 9
-00:00:29.600 --> 00:00:30.950
+00:00:28.880 --> 00:00:30.230
 it can even test what it's made
 
 10
-00:00:30.990 --> 00:00:33.770
+00:00:30.270 --> 00:00:33.050
 and fix any problems
 before showing you the result.
 
 11
-00:00:33.810 --> 00:00:37.760
+00:00:33.090 --> 00:00:37.040
 That's how a chatbot can make
 an MP4 video entirely from code,
 
 12
-00:00:37.800 --> 00:00:39.530
+00:00:37.080 --> 00:00:38.810
 like the animation you're watching now.
 
 13
-00:00:39.570 --> 00:00:41.130
+00:00:38.850 --> 00:00:40.410
 For this and many other reasons,
 
 14
-00:00:41.170 --> 00:00:44.820
+00:00:40.450 --> 00:00:44.100
 the harness is often more important
 than the model in many cases.
 
 15
-00:00:44.860 --> 00:00:48.770
+00:00:44.140 --> 00:00:48.050
 Try this: pick Claude Opus 5.5
 in both Claude and Copilot,
 
 16
-00:00:48.810 --> 00:00:51.040
+00:00:48.090 --> 00:00:50.320
 and give each the same request.
 
 17
-00:00:51.080 --> 00:00:55.260
+00:00:50.360 --> 00:00:54.540
 Ask for a 20-second animated video
 on a topic of your choice,
 
 18
-00:00:55.300 --> 00:00:58.000
+00:00:54.580 --> 00:00:57.280
 as an MP4 file you can download,
 
 19
-00:00:58.040 --> 00:01:02.730
+00:00:57.320 --> 00:01:02.010
 and ask it to check the video plays
 before it shares it.
 
 20
-00:01:03.130 --> 00:01:05.000
+00:01:02.410 --> 00:01:04.280
 Then compare what you get back.
 
 21
-00:01:05.650 --> 00:01:07.760
+00:01:04.930 --> 00:01:07.040
 Same model. Different harness.
 
 22
-00:01:07.800 --> 00:01:11.390
+00:01:07.080 --> 00:01:10.670
 You'll find the full prompt
 and links to further reading in the post.

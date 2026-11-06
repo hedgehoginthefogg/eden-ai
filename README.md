@@ -23,7 +23,7 @@ Until the first tip is posted, the page shows a short note saying cards will app
 - **Shake for a tip:** on a phone, shake your phone to rattle a catalogue drawer, and a random card pops out. There's also a "Pick a card" button for anyone who can't or doesn't want to shake.
 - **Add to your home screen:** on a phone or tablet, select "Add these tips to your home screen" to keep the tips like an app. They work offline once opened, apart from videos.
 - **List view:** shows every tip as text, which suits screen readers and quick scanning.
-- **Link to a tip:** each tip has its own address. For example, `#tip-4` at the end of the page address opens tip 4.
+- **Link to a tip:** each tip has its own address, made from its headline. For example, `#your-chatbot-has-a-computer` at the end of the page address opens that tip.
 
 ## What's in this repository
 
