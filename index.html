@@ -133,6 +133,7 @@ h1 { font-family: "Newsreader", Georgia, "Times New Roman", serif; font-weight: 
 .meta { color: var(--muted); font-size: 0.92rem; margin: 0; }
 .item p { margin: 0 0 0.6rem; max-width: 70ch; }
 #dTry .trybox, .trywrap .trybox { margin: 0.5rem 0 0.75rem; }
+a.tipref { font-weight: 700; }
 .trybox { background: var(--table); border-radius: 8px; padding: 0.7rem 0.9rem; margin: 0.4rem 0 0.8rem; max-width: 72ch; }
 .trybox p { margin: 0 0 0.5rem; }
 .copybtn {
@@ -823,15 +824,32 @@ const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0
    "link text (https://…)" wherever plain text is needed, such as a copied prompt. */
 const MD_LINK = /\[([^\]\n]+)\]\(((?:https?:\/\/|mailto:)[^\s)]+)\)/g;
 const plainOf = (text) => String(text || "").replace(MD_LINK, (m, label, url) => `${label} (${url.replace(/^mailto:/, "")})`);
+/* A headline of another posted card, written in single quotation marks ('Your chatbot has a computer'),
+   becomes a bold link that opens that card. Apostrophes inside a headline (agent's) are allowed. */
+const TIP_REF = /['‘]((?:[^'’\n]|['’](?=[A-Za-z]))+?)['’](?![A-Za-z])/g;
+const HEAD_INDEX = new Map(TIPS.map((t, i) => [String(t.head || "").trim().toLowerCase().replace(/’/g, "'"), i]));
+function refNodes(str) {
+  const out = []; let last = 0;
+  for (const m of str.matchAll(TIP_REF)) {
+    const i = HEAD_INDEX.get(m[1].trim().toLowerCase().replace(/’/g, "'"));
+    if (i === undefined) continue;
+    if (m.index > last) out.push(document.createTextNode(str.slice(last, m.index)));
+    const a = document.createElement("a"); a.className = "tipref"; a.href = "#" + (TIPS[i].key || ""); a.textContent = TIPS[i].head;
+    a.addEventListener("click", (e) => { e.preventDefault(); openDetail(i); });
+    out.push(a); last = m.index + m[0].length;
+  }
+  if (last < str.length) out.push(document.createTextNode(str.slice(last)));
+  return out;
+}
 function richNodes(text) {
   const out = []; const str = String(text || ""); let last = 0;
   for (const m of str.matchAll(MD_LINK)) {
-    if (m.index > last) out.push(document.createTextNode(str.slice(last, m.index)));
+    if (m.index > last) out.push(...refNodes(str.slice(last, m.index)));
     const a = document.createElement("a"); a.href = m[2]; a.textContent = m[1];
     if (!m[2].startsWith("mailto:")) { a.target = "_blank"; a.rel = "noopener"; const n = document.createElement("span"); n.className = "vh"; n.textContent = " (opens in a new tab)"; a.appendChild(n); }
     out.push(a); last = m.index + m[0].length;
   }
-  if (last < str.length) out.push(document.createTextNode(str.slice(last)));
+  if (last < str.length) out.push(...refNodes(str.slice(last)));
   return out;
 }
 const HAY = TIPS.map((t) => norm([t.head, plainOf(t.tip), plainOf(t.try), plainOf(t.why), t.cat, t.level, t.dateLabel, "tip " + t.no].join(" ")));
