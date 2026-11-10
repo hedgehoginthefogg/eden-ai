@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Help Claude make more accessible PDFs – AI and Education</title>
+<meta name="description" content="A prompt that helps Claude turn web pages into accessible, tagged PDFs that pass automated checks.">
+<style>
+:root { --bg: #FBF8F1; --ink: #1D2533; --muted: #4A5565; --line: #D5D0C4; --accent: #1F3A93; --box: #EFEAE0; --focus: #B4530C; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --bg: #12161D; --ink: #E8ECF2; --muted: #A9B2C0; --line: #354050; --accent: #9DB4FF; --box: #1B212B; --focus: #F0A45C; color-scheme: dark; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 1.05rem/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+main { max-width: 46rem; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.back { display: inline-block; margin-bottom: 1rem; }
+h1 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.9rem, 5vw, 2.5rem); line-height: 1.15; margin: 0.2rem 0 1rem; }
+h2 { font-size: 1.35rem; margin: 2rem 0 0.6rem; }
+h3 { font-size: 1.1rem; margin: 1.5rem 0 0.4rem; }
+code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.92em; background: var(--box); padding: 0.05rem 0.3rem; border-radius: 4px; }
+.promptbox { border: 2px solid var(--line); border-radius: 10px; padding: 0.5rem 1.25rem 1.25rem; background: var(--box); margin-top: 1.5rem; }
+.tools { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin: 1rem 0 0.5rem; }
+button { font: inherit; font-weight: 700; color: var(--ink); background: var(--bg); border: 2px solid var(--ink); border-radius: 8px; padding: 0.55rem 1rem; min-height: 44px; cursor: pointer; }
+.status { color: var(--muted); }
+footer { color: var(--muted); font-size: 0.92rem; border-top: 1px solid var(--line); margin-top: 2.5rem; padding-top: 1rem; }
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="../">← All the AI and Education tips</a>
+<h1>Help Claude make more accessible PDFs</h1>
+<p>By default, Claude will often create PDFs that are not accessible,
+for example they don’t work well with screen reading software. This
+prompt can help Claude turn Artifacts such as html web pages into a PDF
+with tagged headings, alt text for images and good colour context. The
+resulting PDF should pass automated accessibility tests, such as those
+available via <a href="https://check.axes4.com/en">axesCheck</a>.
+However, automated tests can’t capture all issues – you should still
+review the PDF yourself, and ideally get input from someone who uses
+screen reading software. For an exploration of what can and can’t be
+tested automatically, see for example <a
+href="https://abilitynet.org.uk/news-blogs/how-should-accessibility-testing-change-age-ai">How
+should accessibility testing change in the age of AI?</a>.</p>
+<p>This prompt is the result of ongoing experimentation and testing –
+please let Steven Williams (s.williams10@lse.ac.uk) know if you have any
+suggestions for improvements.</p>
+<div class="tools">
+  <button type="button" id="copy">Copy the prompt</button>
+  <a href="help-claude-make-more-accessible-pdfs.md" download>Download it as a Markdown file</a>
+  <span class="status" id="status" role="status" aria-live="polite"></span>
+</div>
+<p>Paste the prompt into Claude together with your Artifact or web page, and ask for an accessible PDF.</p>
+<section class="promptbox" aria-labelledby="overview">
+<h2 id="overview">Overview</h2>
+<p>Don’t make the accessible PDF by printing a web page from a browser
+such as Chromium. Browser PDFs leave backgrounds, borders and boxes
+untagged, don’t add the PDF/UA metadata, and usually fail accessibility
+checkers such as axesCheck and PAC. Use this method instead.</p>
+<h3 id="write-a-clean-semantic-version-first">1. Write a clean, semantic
+version first</h3>
+<ul>
+<li>Write the content as a simple HTML file: no buttons, text boxes,
+copy controls, scripts or decorative wrappers.</li>
+<li>Use one Heading 1 for the title, then headings in order without
+skipping levels. Keep labels such as timings or “Optional” after the
+heading they belong to, not before it.</li>
+<li>Give every image alt text. For an animation, use a still frame and
+say in the alt text that it’s a still from an animation.</li>
+<li>Leave out decorative images, such as photos of people, and give
+every other image a set width as a percentage of the text width (for
+example width=“100%” for wide screenshots and diagrams, and 40–75% for
+small screenshots and buttons), so pandoc doesn’t size images at their
+full pixel dimensions.</li>
+<li>Turn any diagram that shows which item goes with which into a table
+with header cells.</li>
+<li>Use real lists, and give every table a header row.</li>
+<li>If the document is longer than a few pages, add a “Contents” list
+after the introduction, with each entry linking to its heading and
+giving its page number. Build the PDF once, read each heading’s page
+number from the PDF bookmarks, fill the numbers in, then build again and
+confirm they haven’t changed.</li>
+</ul>
+<h3 id="convert-to-word-with-pandoc">2. Convert to Word with pandoc</h3>
+<ul>
+<li>Convert the HTML to a Word file with pandoc, setting the language to
+en-GB, and run pandoc with a UTF-8 locale (for example LANG=C.UTF-8) so
+characters such as en dashes aren’t garbled.</li>
+<li>Don’t let a title paragraph appear above the Heading 1: remove the
+HTML <code>&lt;title&gt;</code> before converting, and set the document
+title in the Word file’s properties (docProps/core.xml) instead.</li>
+<li>Then edit the Word file before exporting:
+<ul>
+<li>Rename the paragraph style called “Figure” (for example to “Image
+block”). LibreOffice turns style names into PDF tags, and a style called
+Figure clashes with the real image tags.</li>
+<li>Replace the default light-blue colour (#4F81BD) on headings and
+links with dark colours, removing the theme colour attributes so the
+theme can’t override them. For example, use #1C1F3A for headings and
+#1F3A93 for links. The default blue fails WCAG contrast.</li>
+<li>Pandoc wraps each section in a bookmark that spans the whole
+section, placed between paragraphs, so LibreOffice can send contents
+links to the wrong place or drop them. Move each heading’s bookmark
+inside its heading paragraph, straight after the paragraph properties,
+as a point bookmark (start and end together), and delete the original
+end marker.</li>
+<li>Set the page size to A4 with 2.54 cm margins in the Word file’s
+section properties (w:sectPr, with w:pgSz of 11906 × 16838 and w:pgMar
+of 1440 on each side). Pandoc leaves these empty, so LibreOffice would
+otherwise use US Letter.</li>
+<li>Pandoc sizes percentage image widths against its own assumed text
+width, not the page’s, so scale every image (wp:extent and a:ext) to the
+real text width: 9026 twips on A4 with these margins.</li>
+<li>If the contents list should have a page to itself, add a page break
+before the first main heading.</li>
+</ul></li>
+</ul>
+<h3 id="export-with-libreoffice">3. Export with LibreOffice</h3>
+<ul>
+<li>Export the Word file to PDF with LibreOffice in headless mode, with
+PDF/UA compliance, tagged PDF and bookmarks turned on (filter options
+PDFUACompliance, UseTaggedPDF and ExportBookmarks set to true).</li>
+<li>If LibreOffice or pandoc isn’t available, tell me before using
+another method.</li>
+</ul>
+<h3 id="check-the-pdf-in-code-before-giving-it-to-me">4. Check the PDF
+in code before giving it to me</h3>
+<ul>
+<li>Every painting operator on every page is either inside tagged
+content or marked as an Artifact.</li>
+<li>The document language is en-GB, the title is set and DisplayDocTitle
+is true, MarkInfo Marked is true, and the XMP metadata includes
+pdfuaid:part 1 and dc:title.</li>
+<li>Headings run in order without skipping levels, and there is only one
+H1.</li>
+<li>Every Figure has alt text, and no standard tag names (such as
+Figure, P or Table) appear as keys in the role map.</li>
+<li>Tables have TH cells.</li>
+<li>Every link annotation has a description in its Contents entry, and
+every internal link goes to the top of the right page. List each
+contents link with its target page.</li>
+<li>All fonts are embedded.</li>
+<li>Every image has the width it was given. List each image with its
+width on the page.</li>
+<li>Every page is A4 (595 × 842 points).</li>
+<li>Every text colour in the finished PDF meets WCAG 2.2 AA contrast
+against its background. List each colour with its contrast ratio.</li>
+<li>Bookmarks exist for every main heading.</li>
+</ul>
+<p>Tell me anything you couldn’t check, so I can test the PDF with <a
+href="https://check.axes4.com/en">axesCheck</a> or PAC. If it fails,
+I’ll give you the report so you can fix it.</p>
+</section>
+<footer>
+<p>From the AI and Education tips by the Eden Centre and Digital Skills Lab, LSE. Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>.</p>
+</footer>
+</main>
+<script>
+const PROMPT = "## Overview\n\nDon't make the accessible PDF by printing a web page from a browser such as Chromium. Browser PDFs leave backgrounds, borders and boxes untagged, don't add the PDF/UA metadata, and usually fail accessibility checkers such as axesCheck and PAC. Use this method instead.\n\n### 1. Write a clean, semantic version first\n\n- Write the content as a simple HTML file: no buttons, text boxes, copy controls, scripts or decorative wrappers.\n- Use one Heading 1 for the title, then headings in order without skipping levels. Keep labels such as timings or \"Optional\" after the heading they belong to, not before it.\n- Give every image alt text. For an animation, use a still frame and say in the alt text that it's a still from an animation.\n- Leave out decorative images, such as photos of people, and give every other image a set width as a percentage of the text width (for example width=\"100%\" for wide screenshots and diagrams, and 40–75% for small screenshots and buttons), so pandoc doesn't size images at their full pixel dimensions.\n- Turn any diagram that shows which item goes with which into a table with header cells.\n- Use real lists, and give every table a header row.\n- If the document is longer than a few pages, add a \"Contents\" list after the introduction, with each entry linking to its heading and giving its page number. Build the PDF once, read each heading's page number from the PDF bookmarks, fill the numbers in, then build again and confirm they haven't changed.\n\n### 2. Convert to Word with pandoc\n\n- Convert the HTML to a Word file with pandoc, setting the language to en-GB, and run pandoc with a UTF-8 locale (for example LANG=C.UTF-8) so characters such as en dashes aren't garbled.\n- Don't let a title paragraph appear above the Heading 1: remove the HTML `<title>` before converting, and set the document title in the Word file's properties (docProps/core.xml) instead.\n- Then edit the Word file before exporting:\n  - Rename the paragraph style called \"Figure\" (for example to \"Image block\"). LibreOffice turns style names into PDF tags, and a style called Figure clashes with the real image tags.\n  - Replace the default light-blue colour (#4F81BD) on headings and links with dark colours, removing the theme colour attributes so the theme can't override them. For example, use #1C1F3A for headings and #1F3A93 for links. The default blue fails WCAG contrast.\n  - Pandoc wraps each section in a bookmark that spans the whole section, placed between paragraphs, so LibreOffice can send contents links to the wrong place or drop them. Move each heading's bookmark inside its heading paragraph, straight after the paragraph properties, as a point bookmark (start and end together), and delete the original end marker.\n  - Set the page size to A4 with 2.54 cm margins in the Word file's section properties (w:sectPr, with w:pgSz of 11906 × 16838 and w:pgMar of 1440 on each side). Pandoc leaves these empty, so LibreOffice would otherwise use US Letter.\n  - Pandoc sizes percentage image widths against its own assumed text width, not the page's, so scale every image (wp:extent and a:ext) to the real text width: 9026 twips on A4 with these margins.\n  - If the contents list should have a page to itself, add a page break before the first main heading.\n\n### 3. Export with LibreOffice\n\n- Export the Word file to PDF with LibreOffice in headless mode, with PDF/UA compliance, tagged PDF and bookmarks turned on (filter options PDFUACompliance, UseTaggedPDF and ExportBookmarks set to true).\n- If LibreOffice or pandoc isn't available, tell me before using another method.\n\n### 4. Check the PDF in code before giving it to me\n\n- Every painting operator on every page is either inside tagged content or marked as an Artifact.\n- The document language is en-GB, the title is set and DisplayDocTitle is true, MarkInfo Marked is true, and the XMP metadata includes pdfuaid:part 1 and dc:title.\n- Headings run in order without skipping levels, and there is only one H1.\n- Every Figure has alt text, and no standard tag names (such as Figure, P or Table) appear as keys in the role map.\n- Tables have TH cells.\n- Every link annotation has a description in its Contents entry, and every internal link goes to the top of the right page. List each contents link with its target page.\n- All fonts are embedded.\n- Every image has the width it was given. List each image with its width on the page.\n- Every page is A4 (595 × 842 points).\n- Every text colour in the finished PDF meets WCAG 2.2 AA contrast against its background. List each colour with its contrast ratio.\n- Bookmarks exist for every main heading.\n\nTell me anything you couldn't check, so I can test the PDF with [axesCheck](https://check.axes4.com/en) or PAC. If it fails, I'll give you the report so you can fix it.";
+document.getElementById("copy").addEventListener("click", async () => {
+  const s = document.getElementById("status");
+  try { await navigator.clipboard.writeText(PROMPT); s.textContent = "Copied. Paste it into Claude."; }
+  catch (e) { s.textContent = "Couldn’t copy automatically. Select the text below and copy it instead."; }
+});
+</script>
+</body>
+</html>
