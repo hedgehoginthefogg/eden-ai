@@ -1,0 +1,102 @@
+WEBVTT
+
+1
+00:00:00.155 --> 00:00:02.274
+Name the tool you want it to use.
+
+2
+00:00:04.310 --> 00:00:05.920
+Chatbots now have tools.
+
+3
+00:00:06.304 --> 00:00:08.316
+But they still work by prediction,
+
+4
+00:00:08.366 --> 00:00:11.293
+so they only use a tool
+when they predict it's needed.
+
+5
+00:00:11.816 --> 00:00:14.217
+If a topic doesn't look time-sensitive,
+
+6
+00:00:14.267 --> 00:00:17.965
+a chatbot may answer from its
+training data instead of searching the web
+
+7
+00:00:18.087 --> 00:00:19.993
+and give you out-of-date information.
+
+8
+00:00:20.496 --> 00:00:24.005
+And it may convert a file or do maths
+with its language model
+
+9
+00:00:24.055 --> 00:00:25.418
+rather than with code,
+
+10
+00:00:25.468 --> 00:00:29.178
+and make mistakes or change details
+in ways that are hard to notice.
+
+11
+00:00:29.905 --> 00:00:34.415
+So when you need something recent,
+exact or checkable, name the tool:
+
+12
+00:00:34.633 --> 00:00:36.689
+web search for current information
+
+13
+00:00:36.739 --> 00:00:39.614
+and code for calculations
+or converting files.
+
+14
+00:00:39.664 --> 00:00:43.725
+Try this. Tell the chatbot
+which tools to use. For example:
+
+15
+00:00:43.775 --> 00:00:49.104
+“Use web search to find the 2026 HEPI
+Student Generative AI Survey.
+
+16
+00:00:49.154 --> 00:00:53.515
+Summarise what it says about how students
+use GenAI and link your sources.”
+
+17
+00:00:54.037 --> 00:00:57.952
+Or: “Use code to merge
+these two CSV files together
+
+18
+00:00:58.002 --> 00:01:00.051
+without changing any of the content.”
+
+19
+00:01:02.517 --> 00:01:04.968
+In the future,
+each time you use a chatbot,
+
+20
+00:01:05.018 --> 00:01:08.214
+consider asking it what tools it used
+and how they work.
+
+21
+00:01:08.589 --> 00:01:11.144
+For example:
+“If I ask you to read a website,
+
+22
+00:01:11.194 --> 00:01:13.470
+what do you actually do?”
