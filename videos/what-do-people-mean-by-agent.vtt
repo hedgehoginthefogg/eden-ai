@@ -1,0 +1,158 @@
+WEBVTT
+
+1
+00:00:00.650 --> 00:00:02.802
+What do people mean by ‘agent’?
+
+2
+00:00:03.332 --> 00:00:06.381
+‘Agent’ means different things
+depending on who’s talking.
+
+3
+00:00:06.816 --> 00:00:11.207
+Microsoft calls chatbots with custom
+instructions ‘Copilot Agents’,
+
+4
+00:00:11.445 --> 00:00:13.457
+even when they only answer questions.
+
+5
+00:00:14.112 --> 00:00:16.458
+When people talk about coding agents,
+they often mean
+
+6
+00:00:16.468 --> 00:00:19.006
+a definition associated with Anthropic –
+
+7
+00:00:19.305 --> 00:00:22.186
+models using tools in a loop
+towards a goal.
+
+8
+00:00:22.528 --> 00:00:26.033
+But normal Claude and Copilot chats
+now work in a similar way,
+
+9
+00:00:26.314 --> 00:00:28.803
+which is one reason why
+token usage for those products
+
+10
+00:00:28.813 --> 00:00:30.949
+is much higher than it used to be.
+
+11
+00:00:31.349 --> 00:00:34.223
+So as a general definition,
+this may be out of date.
+
+12
+00:00:35.033 --> 00:00:37.771
+New products such as
+Meta’s Muse and OpenAI’s Dots
+
+13
+00:00:37.781 --> 00:00:40.668
+are popularising a new definition.
+
+14
+00:00:40.858 --> 00:00:43.998
+This kind of agent is a chatbot
+you give an ongoing job,
+
+15
+00:00:44.008 --> 00:00:47.237
+and then it works in the background
+and takes action on your behalf.
+
+16
+00:00:47.315 --> 00:00:48.950
+For example, buying something.
+
+17
+00:00:49.783 --> 00:00:50.983
+Why it matters.
+
+18
+00:00:51.572 --> 00:00:53.765
+Understanding that there are
+different definitions
+
+19
+00:00:53.775 --> 00:00:56.800
+can help you critically assess
+how the term is being used.
+
+20
+00:00:57.126 --> 00:00:59.059
+Up this ladder, autonomy increases
+
+21
+00:00:59.069 --> 00:01:02.163
+and so do the cognitive
+and security risks.
+
+22
+00:01:02.323 --> 00:01:05.820
+What role, if any, could each type
+of agent have in your discipline?
+
+23
+00:01:05.830 --> 00:01:07.030
+Try this.
+
+24
+00:01:07.483 --> 00:01:10.915
+LSE doesn’t currently have a licence
+for anything truly agentic,
+
+25
+00:01:10.925 --> 00:01:13.041
+as most people now understand the term.
+
+26
+00:01:13.430 --> 00:01:16.198
+The nearest thing is
+a scheduled prompt in Copilot,
+
+27
+00:01:16.455 --> 00:01:18.108
+though it can’t really act for you,
+
+28
+00:01:18.118 --> 00:01:21.261
+and you should be aware that students
+don’t have access to this feature.
+
+29
+00:01:22.136 --> 00:01:24.947
+Send Copilot a prompt,
+then hover over it.
+
+30
+00:01:25.017 --> 00:01:28.346
+Select Schedule this prompt
+and choose how often.
+
+31
+00:01:28.703 --> 00:01:33.091
+For example, you could ask it to check
+a web page you look after once a week
+
+32
+00:01:33.101 --> 00:01:34.388
+for anything out of date,
+
+33
+00:01:36.783 --> 00:01:40.042
+or to search for the last week’s news
+on a topic you follow
+
+34
+00:01:40.052 --> 00:01:41.750
+and list up to five items.
