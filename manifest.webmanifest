@@ -1,7 +1,7 @@
 {
-  "name": "GenAI tips from the Eden Centre",
-  "short_name": "GenAI tips",
-  "description": "Every tip posted in the Eden Centre’s AI and Education channel in Teams.",
+  "name": "AI & Education: Tips, updates and news",
+  "short_name": "AI & Education",
+  "description": "LSE Eden Centre and Digital Skills Lab",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
