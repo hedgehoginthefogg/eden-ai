@@ -1,0 +1,118 @@
+WEBVTT
+
+1
+00:00:00.089 --> 00:00:02.490
+What a chatbot reads before your message
+
+2
+00:00:02.490 --> 00:00:06.242
+Before your message, a chatbot
+is given text you don’t see.
+
+3
+00:00:06.242 --> 00:00:09.455
+A system prompt setting
+its tone and rules,
+
+4
+00:00:09.455 --> 00:00:14.088
+information about each tool it can use
+and descriptions of skills –
+
+5
+00:00:14.088 --> 00:00:19.175
+instruction files it can load when
+necessary for tasks like website design.
+
+6
+00:00:19.480 --> 00:00:24.036
+With memory switched on, it also gets
+short notes about you from past chats.
+
+7
+00:00:24.036 --> 00:00:26.988
+These can change its replies
+in obvious ways,
+
+8
+00:00:26.988 --> 00:00:30.653
+like giving examples related to your job
+and subtle ones
+
+9
+00:00:30.653 --> 00:00:34.657
+like using red in all its designs
+because you work at LSE.
+
+10
+00:00:34.657 --> 00:00:37.934
+You can also add your own layers
+through global preferences
+
+11
+00:00:37.934 --> 00:00:42.779
+and custom instructions for things like
+Claude Projects or Copilot Agents.
+
+12
+00:00:43.322 --> 00:00:46.882
+Alongside the harness –
+the software around the model –
+
+13
+00:00:46.882 --> 00:00:50.444
+these hidden layers are another reason
+the same model can act differently
+
+14
+00:00:50.444 --> 00:00:54.220
+in different apps, and the prompt
+layers are all processed
+
+15
+00:00:54.220 --> 00:00:58.335
+again with every message along
+with the whole chat so far.
+
+16
+00:00:58.390 --> 00:01:02.008
+In addition to the fact that normal
+chats now use tools in a loop
+
+17
+00:01:02.008 --> 00:01:05.349
+like coding agents, these
+increased layers of prompts
+
+18
+00:01:05.349 --> 00:01:09.712
+are another reason chatbots now use
+far more tokens than they used to.
+
+19
+00:01:09.712 --> 00:01:12.675
+Try this: in a normal chat, ask
+
+20
+00:01:12.675 --> 00:01:14.472
+“What do you know about me?”
+
+21
+00:01:14.472 --> 00:01:18.010
+Then in the chatbot’s memory settings,
+remove anything out of date
+
+22
+00:01:18.010 --> 00:01:20.786
+or that you don’t want to shape
+the replies it gives you.
+
+23
+00:01:20.786 --> 00:01:23.832
+Compare the same prompts in incognito
+mode and a normal chat
+
+24
+00:01:23.832 --> 00:01:27.366
+to see the difference that
+memory features make.
