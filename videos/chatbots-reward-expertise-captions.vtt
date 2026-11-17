@@ -1,0 +1,99 @@
+WEBVTT
+
+1
+00:00:00.299 --> 00:00:02.029
+Chatbots reward expertise.
+
+2
+00:00:03.338 --> 00:00:06.197
+For many tasks, the knowledge
+is already in the chatbot.
+
+3
+00:00:06.302 --> 00:00:08.087
+The hard part is getting it out.
+
+4
+00:00:08.650 --> 00:00:11.472
+The questions you ask,
+the specialist terms you use,
+
+5
+00:00:11.512 --> 00:00:15.154
+and the suggestions you make
+all steer it towards a particular area
+
+6
+00:00:15.194 --> 00:00:17.764
+of its knowledge, its semantic space.
+
+7
+00:00:18.256 --> 00:00:22.679
+As programmer Sean Goedecke puts it,
+LLMs reward expertise.
+
+8
+00:00:22.724 --> 00:00:26.966
+A novice and an expert doing the same task
+get very different results.
+
+9
+00:00:27.387 --> 00:00:31.225
+Uploading a relevant document is
+a shortcut to steering the chatbot
+
+10
+00:00:31.265 --> 00:00:32.465
+towards expert answers.
+
+11
+00:00:32.916 --> 00:00:35.860
+Chatbots work by predicting
+the next word in a sequence
+
+12
+00:00:35.900 --> 00:00:39.590
+that includes the whole chat so far
+and any documents you’ve uploaded.
+
+13
+00:00:39.630 --> 00:00:43.505
+Now that chatbots have large
+context windows, adding a document
+
+14
+00:00:43.545 --> 00:00:47.728
+is a quick way to guide their predictions
+from generic into something more useful.
+
+15
+00:00:48.367 --> 00:00:49.254
+Try this.
+
+16
+00:00:49.294 --> 00:00:53.578
+Pick a task from your own work, such as
+suggesting formative assessment ideas.
+
+17
+00:00:53.982 --> 00:00:57.383
+Try it in two fresh chats,
+one as a plain request,
+
+18
+00:00:57.512 --> 00:01:01.080
+and once with relevant documents attached,
+such as the course syllabus
+
+19
+00:01:01.120 --> 00:01:02.740
+and an article you trust.
+
+20
+00:01:03.143 --> 00:01:04.343
+Compare the answers.
+
+21
+00:01:05.850 --> 00:01:10.090
+You’ll find a link to further reading
+and all the tips so far in the post.
