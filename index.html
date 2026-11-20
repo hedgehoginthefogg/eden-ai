@@ -1854,7 +1854,7 @@ window.addEventListener("hashchange", () => {
 });
 
 /* ---------- Shake for a tip (phones) ---------- */
-const shake = { listening: false, gotEvent: false, hits: [], last: 0, recent: [], current: null, busy: false };
+const shake = { listening: false, gotEvent: false, hits: [], last: 0, recent: [], current: null, busy: false, armed: true, stillSince: 0 };
 if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches && TIPS.length) $("shakeBtn").hidden = false;
 function pickRandomTip() {
   const keep = Math.min(5, TIPS.length - 1);
@@ -1892,11 +1892,19 @@ function onMotion(e) {
   else if (g && g.x != null) m = Math.abs(Math.hypot(g.x || 0, g.y || 0, g.z || 0) - 9.81);
   if (m == null) return;
   const now = Date.now();
+  // After a card comes out, wait until the phone has been held still for a moment before
+  // listening for the next shake, so the end of one shake can't trigger a second card.
+  if (!shake.armed) {
+    if (m < 4) { if (!shake.stillSince) shake.stillSince = now; if (now - shake.stillSince > 700) { shake.armed = true; shake.hits = []; } }
+    else shake.stillSince = 0;
+    return;
+  }
   if (m > 14) { shake.hits = shake.hits.filter((t) => now - t < 700); shake.hits.push(now); }
-  if (shake.hits.length >= 3 && now - shake.last > 1300) { shake.last = now; shake.hits = []; drawFromDrawer(); }
+  if (shake.hits.length >= 3 && now - shake.last > 2000) { shake.last = now; shake.hits = []; shake.armed = false; shake.stillSince = 0; drawFromDrawer(); }
 }
 function listenForShakes() {
   if (shake.listening) return;
+  shake.armed = true; shake.stillSince = 0; shake.hits = [];
   window.addEventListener("devicemotion", onMotion);
   shake.listening = true; shake.gotEvent = false;
   setTimeout(() => {
