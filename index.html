@@ -172,7 +172,9 @@ dialog::backdrop { background: rgba(10, 14, 20, 0.55); }
   padding: 0.35rem 1.15rem; font-weight: 700; cursor: pointer;
 }
 .quizbtn:hover { filter: brightness(1.15); }
-body.selecting .views button[data-view="category"], body.selecting .views button[data-view="list"], body.selecting .quizbtn { display: none; }
+body.selecting .views button[data-view="category"], body.selecting .views button[data-view="list"], body.selecting .quizbtn, body.selecting #packBtn { display: none; }
+.packbar { margin: 0 0 1rem; padding: 0.7rem 1rem; border-radius: 8px; background: var(--table); font-weight: 600; }
+.packbar a { margin-left: 0.4rem; }
 .card .tick {
   position: absolute; top: -10px; right: -10px; width: 38px; height: 38px; border-radius: 50%;
   background: var(--ink); color: var(--surface); display: none; align-items: center; justify-content: center;
@@ -439,10 +441,12 @@ body.selecting .shakebtn { display: none; }
     <button type="button" class="shakebtn" id="shakeBtn" hidden>Shake for a tip</button>
     <button type="button" class="shakebtn" id="botBtn" hidden>Find the rogue bot</button>
     <button type="button" class="shakebtn" id="matchBtn" hidden>Match the pairs</button>
+    <button type="button" class="shakebtn" id="packBtn" hidden>Make a pack to share</button>
     <p class="count" id="count" role="status" aria-live="polite"></p>
   </div>
 
   <main>
+    <p class="packbar" id="packbar" hidden><span id="packMsg"></span> <a id="packAll" href="./">See all the tips</a></p>
     <div class="pilebar" id="pilebar" hidden>
       <button type="button" id="backToPiles">Back to all piles</button>
       <strong id="pileName"></strong>
@@ -454,7 +458,7 @@ body.selecting .shakebtn { display: none; }
     </section>
     <div class="table" id="table"></div>
     <div class="selbar" id="selbar" hidden>
-      <p><strong>Select the cards to quiz yourself on.</strong> <span id="selCount" role="status" aria-live="polite">0 selected.</span></p>
+      <p><strong id="selHead">Select the cards to quiz yourself on.</strong> <span id="selCount" role="status" aria-live="polite">0 selected.</span></p>
       <button type="button" id="selAll">Select all shown</button>
       <button type="button" class="primary" id="selStart" disabled>Start quiz</button>
       <button type="button" id="selCancel">Cancel</button>
@@ -468,7 +472,7 @@ body.selecting .shakebtn { display: none; }
     <p>GenAI disclaimer: I (Steven Williams, AI and Education Specialist at the Eden Centre and Digital Skills Lab) designed this series and built it using Claude (Anthropic). I’ve reviewed and edited every tip before posting it, and I take responsibility for any errors.</p>
     <details class="process"><summary>How these tips were made</summary><p><strong>Planning.</strong> Outside of Claude, I brainstormed what I wanted, the audience, and the aim of the series: every tip should change how colleagues use chatbots or how they talk about them. After some initial tests in Claude, I decided on the themed collections, the weekly pattern and the house style.</p><p><strong>Drafting.</strong> I worked in a Claude Project that has access to a detailed work tracker I update every day, and Project Instructions that outline the learning principles which I believe are most relevant to GenAI-created resources. In a single chat inside the Project, using the Opus 5.5 model on High thinking, I gave Claude workshop materials I've created, articles I’ve written for the AI and Education Toolkit and activities I drafted for the new AI Fluency course. I asked Claude to extract possible tips from this content, with each including a “Try this” prompt, quiz question and game clue. I gave feedback on each draft, often several times, and manually rewrote, merged or deleted many cards along the way. For the LSE and News cards, I asked it to draw on my Work Tracker document, and include a “Why it matters” rather than “Try this” prompt.</p><p><strong>Pictures and code.</strong> Claude drew each card’s picture as code (SVG), following a style I set. It also wrote the code for the image maker that turns each tip into a card, for this page and its games, and for the trailer video, which is animated entirely in code.</p><p><strong>Checking.</strong> Each tip is marked “Drafted by Claude” until I’ve edited it and checked it against its sources. I only post cards I’ve marked “Edited and approved”.</p><p><strong>Questions or corrections:</strong> Steven Williams, <a href="mailto:s.williams10@lse.ac.uk">s.williams10@lse.ac.uk</a></p></details>
     <p>Tips and pictures by the Eden Centre, LSE, licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>. You’re welcome to share and adapt them with credit.</p>
-    <p>Updated 20 Nov 2026.</p>
+    <p>Updated 23 Nov 2026.</p>
   </footer>
 </div>
 
@@ -963,10 +967,26 @@ const cards = TIPS.map((t, i) => {
 
 /* ---------- Which cards, in what order ---------- */
 const chrono = TIPS.map((_, i) => i);
+const PACK = (() => {
+  try {
+    const raw = new URLSearchParams(location.search).get("pack");
+    if (!raw) return null;
+    const want = raw.split(",").map((k) => k.trim()).filter(Boolean);
+    const set = new Set(TIPS.map((t, i) => (want.includes(t.key) ? i : -1)).filter((i) => i >= 0));
+    return set.size ? set : null;
+  } catch (e) { return null; }
+})();
+if (PACK) {
+  const n = PACK.size;
+  $("packMsg").textContent = `You’re looking at a pack of ${n} ${n === 1 ? "tip" : "tips"} someone shared with you.`;
+  $("packAll").textContent = `See all ${TIPS.length} tips`;
+  $("packAll").href = location.pathname;
+  $("packbar").hidden = false;
+}
 function visibleList() {
   let base = state.view === "shuffled" && state.shuffled ? state.shuffled : chrono;
   if (state.view === "pile") base = chrono.filter((i) => TIPS[i].cat === state.openCat);
-  return base.filter((i) => state.matches[i]);
+  return base.filter((i) => state.matches[i] && (!PACK || PACK.has(i)));
 }
 function groups(vis) {
   const map = new Map();
@@ -1313,7 +1333,7 @@ const hkey = (i) => "tip-" + TIPS[i].no;
 const setupDlg = $("quizSetup"), quizDlg = $("quiz");
 /* mode: "solo" (one person), "same" (two people sharing a device) or "devices" (two people, a device each) */
 const quiz = { mode: "solo", host: true, code: "", list: [], pos: 0, players: [], turnOrder: [0], turn: 0, answers: [], conf: 0, hinted: false, nudged: false, counted: new Set() };
-const sel = { on: false, set: new Set() };
+const sel = { on: false, set: new Set(), purpose: "quiz" };
 const twoPlayer = () => quiz.mode === "same";
 const devices = () => quiz.mode === "devices";
 const iAnswer = () => (quiz.pos % 2 === 0) === quiz.host;
@@ -1452,6 +1472,9 @@ document.querySelectorAll('input[name="qplayers"]').forEach((r) => r.addEventLis
   if (setupMode() === "devices") $("qsJoin").focus();
 }));
 $("quizBtn").addEventListener("click", () => { fillSetup(); setupDlg.showModal(); });
+/* A pack is a set of cards someone has chosen to share: ?pack=key1,key2 shows just those cards. */
+if (TIPS.length >= 2) $("packBtn").hidden = false;
+$("packBtn").addEventListener("click", () => enterSelect("pack"));
 $("qsClose").addEventListener("click", () => setupDlg.close());
 setupDlg.addEventListener("click", (e) => { if (e.target === setupDlg) setupDlg.close(); });
 $("qsRandom").addEventListener("click", () => {
@@ -1480,14 +1503,16 @@ $("qsJoin").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.prev
 
 /* ---------- Choosing cards on the table ---------- */
 let pendingPlayers = null, pendingMode = "solo";
-function enterSelect() {
-  pendingPlayers = playersFromSetup(); pendingMode = setupMode();
+function enterSelect(purpose) {
+  sel.purpose = purpose === "pack" ? "pack" : "quiz";
+  if (sel.purpose === "quiz") { pendingPlayers = playersFromSetup(); pendingMode = setupMode(); }
   if (setupDlg.open) setupDlg.close();
   sel.on = true; sel.set.clear();
+  $("selHead").textContent = sel.purpose === "pack" ? "Select the cards to put in your pack." : "Select the cards to quiz yourself on.";
   if (["category", "list", "pile"].includes(state.view)) { state.view = "date"; state.openCat = null; }
   document.body.classList.add("selecting");
   cards.forEach((c) => { c.classList.remove("selected"); c.setAttribute("aria-pressed", "false"); });
-  $("selStart").textContent = pendingMode === "devices" ? "Get a code" : "Start quiz";
+  $("selStart").textContent = sel.purpose === "pack" ? "Copy link to this pack" : pendingMode === "devices" ? "Get a code" : "Start quiz";
   $("selbar").hidden = false;
   layout({ stagger: 10 });
   updateSelbar();
@@ -1513,8 +1538,19 @@ function updateSelbar() {
   $("selStart").disabled = n === 0;
 }
 $("selAll").addEventListener("click", () => { state.lastVisible.forEach((i) => { if (!sel.set.has(i)) toggleSelect(i); }); });
-$("selCancel").addEventListener("click", () => { exitSelect(); $("quizBtn").focus(); });
-$("selStart").addEventListener("click", () => {
+$("selCancel").addEventListener("click", () => { const back = sel.purpose === "pack" ? "packBtn" : "quizBtn"; exitSelect(); $(back).focus(); });
+$("selStart").addEventListener("click", async () => {
+  if (sel.purpose === "pack") {
+    const keys = [...sel.set].sort((a, b) => a - b).map((i) => TIPS[i].key).filter(Boolean);
+    const url = location.origin + location.pathname + "?pack=" + keys.map(encodeURIComponent).join(",");
+    const n = keys.length;
+    let copied = false;
+    try { await navigator.clipboard.writeText(url); copied = true; } catch (e) { /* fall back below */ }
+    exitSelect();
+    $("count").textContent = copied ? `Link copied. Anyone who opens it will see just these ${n} ${n === 1 ? "card" : "cards"}, and can still see all the tips from there.` : `Copy this link to share your pack: ${url}`;
+    $("packBtn").focus();
+    return;
+  }
   if (pendingMode === "devices") {
     const idx = [...sel.set].sort((a, b) => a - b).slice(0, 127);
     hostGame({ mode: 2, idx, seed: newSeed() });
