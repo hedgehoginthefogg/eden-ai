@@ -173,6 +173,21 @@ dialog::backdrop { background: rgba(10, 14, 20, 0.55); }
 }
 .quizbtn:hover { background: var(--table); }
 body.selecting .views button[data-view="category"], body.selecting .views button[data-view="list"], body.selecting .quizbtn, body.selecting #packBtn { display: none; }
+#feedDlg { width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #0B0F16; color: #F2F4F8; overflow: hidden; }
+#feedDlg::backdrop { background: #0B0F16; }
+.feedtop { position: absolute; top: 0; left: 0; right: 0; z-index: 3; display: flex; align-items: center; gap: 0.6rem; padding: calc(env(safe-area-inset-top, 0px) + 0.6rem) 0.8rem 0.6rem; background: linear-gradient(#0B0F16cc, #0B0F1600); }
+.feedpos { flex: 1; text-align: center; font-weight: 700; }
+.feedctl { min-height: 44px; border: 2px solid #F2F4F8; background: #0B0F16; color: #F2F4F8; border-radius: 999px; padding: 0.3rem 1rem; font: inherit; font-weight: 700; cursor: pointer; }
+.feedctl:focus-visible { outline: 3px solid #F0A45C; outline-offset: 3px; }
+.feedlist { height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; }
+.feeditem { height: 100vh; height: 100dvh; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.7rem; padding: calc(env(safe-area-inset-top, 0px) + 4rem) 1rem calc(env(safe-area-inset-bottom, 0px) + 4.5rem); box-sizing: border-box; }
+.feeditem video { display: block; aspect-ratio: 16 / 9; width: min(100%, 1100px, calc(62vh * 16 / 9)); width: min(100%, 1100px, calc(62dvh * 16 / 9)); height: auto; border-radius: 10px; background: #000; object-fit: contain; }
+.feeditem video.vertical { aspect-ratio: 9 / 16; width: auto; height: min(70vh, calc((100vw - 2rem) * 16 / 9)); height: min(70dvh, calc((100vw - 2rem) * 16 / 9)); }
+.feeditem h3 { margin: 0; font-family: "Newsreader", Georgia, serif; font-weight: 600; font-size: clamp(1.3rem, 3.5vw, 1.9rem); text-align: center; max-width: 34ch; }
+.feedacts { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+.feedacts a { color: #F2F4F8; align-self: center; }
+.feednav { position: absolute; bottom: calc(env(safe-area-inset-bottom, 0px) + 0.7rem); left: 0; right: 0; z-index: 3; display: flex; justify-content: center; gap: 0.6rem; }
+@media (orientation: portrait) and (max-width: 700px) { .feednav { display: none; } }
 .packbar { margin: 0 0 1rem; padding: 0.7rem 1rem; border-radius: 8px; background: var(--table); font-weight: 600; }
 .packbar a { margin-left: 0.4rem; }
 .card .tick {
@@ -442,6 +457,7 @@ body.selecting .shakebtn { display: none; }
     <button type="button" class="shakebtn" id="botBtn" hidden>Find the rogue bot</button>
     <button type="button" class="shakebtn" id="matchBtn" hidden>Match the pairs</button>
     <button type="button" class="shakebtn" id="packBtn" hidden>Make a pack to share</button>
+    <button type="button" class="shakebtn" id="feedBtn" hidden>Watch the videos</button>
     <p class="count" id="count" role="status" aria-live="polite"></p>
   </div>
 
@@ -472,7 +488,7 @@ body.selecting .shakebtn { display: none; }
     <p>GenAI disclaimer: I (Steven Williams, AI and Education Specialist at the Eden Centre and Digital Skills Lab) designed this series and built it using Claude (Anthropic). I’ve reviewed and edited every tip before posting it, and I take responsibility for any errors.</p>
     <details class="process"><summary>How these tips were made</summary><p><strong>Planning.</strong> Outside of Claude, I brainstormed what I wanted, the audience, and the aim of the series: every tip should change how colleagues use chatbots or how they talk about them. After some initial tests in Claude, I decided on the themed collections, the weekly pattern and the house style.</p><p><strong>Drafting.</strong> I worked in a Claude Project that has access to a detailed work tracker I update every day, and Project Instructions that outline the learning principles which I believe are most relevant to GenAI-created resources. In a single chat inside the Project, using the Opus 5.5 model on High thinking, I gave Claude workshop materials I've created, articles I’ve written for the AI and Education Toolkit and activities I drafted for the new AI Fluency course. I asked Claude to extract possible tips from this content, with each including a “Try this” prompt, quiz question and game clue. I gave feedback on each draft, often several times, and manually rewrote, merged or deleted many cards along the way. For the LSE and News cards, I asked it to draw on my Work Tracker document, and include a “Why it matters” rather than “Try this” prompt.</p><p><strong>Pictures and code.</strong> Claude drew each card’s picture as code (SVG), following a style I set. It also wrote the code for the image maker that turns each tip into a card, for this page and its games, and for the trailer video, which is animated entirely in code.</p><p><strong>Checking.</strong> Each tip is marked “Drafted by Claude” until I’ve edited it and checked it against its sources. I only post cards I’ve marked “Edited and approved”.</p><p><strong>Questions or corrections:</strong> Steven Williams, <a href="mailto:s.williams10@lse.ac.uk">s.williams10@lse.ac.uk</a></p></details>
     <p>Tips and pictures by the Eden Centre, LSE, licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>. You’re welcome to share and adapt them with credit.</p>
-    <p>Updated 23 Nov 2026.</p>
+    <p>Updated 24 Nov 2026.</p>
   </footer>
 </div>
 
@@ -739,6 +755,17 @@ body.selecting .shakebtn { display: none; }
       <div class="qactions"><button type="button" class="qbtn primary" id="mAgain">Play again</button><button type="button" class="qbtn" id="mFinish">Close</button></div>
     </section>
   </div>
+</dialog>
+
+<dialog id="feedDlg" aria-labelledby="feedHead">
+  <div class="feedtop">
+    <h2 id="feedHead" class="vh">Tip videos</h2>
+    <button type="button" class="feedctl" id="feedSound" aria-pressed="false">Turn sound on</button>
+    <span class="feedpos" id="feedPos" aria-live="polite"></span>
+    <button type="button" class="feedctl" id="feedClose">Close</button>
+  </div>
+  <div class="feedlist" id="feedList"></div>
+  <div class="feednav"><button type="button" class="feedctl" id="feedPrev">Previous</button><button type="button" class="feedctl" id="feedNext">Next</button></div>
 </dialog>
 
 <dialog id="shakeDlg" aria-labelledby="sHead">
@@ -2262,6 +2289,97 @@ cards.forEach((c) => { c.style.width = m0.cw + "px"; });
 void table.offsetHeight;
 table.classList.remove("instant");
 requestAnimationFrame(() => layout({ stagger: 18 }));
+/* ---------- Watch the videos: a feed of the cards that have videos ----------
+   Phones held upright get the vertical videos to swipe through; computers and sideways phones get the
+   horizontal ones, moved through with scrolling, the arrow keys or Previous and Next. Videos start muted with
+   captions (phones only allow muted autoplay); one tap turns sound on for the rest of the feed. Nothing plays
+   by itself for anyone who has asked their device to reduce motion. Only the video on screen and the next one load. */
+const feed = { items: [], sound: false, current: -1, obs: null };
+const vpath = (name) => "videos/" + encodeURIComponent(name);
+const FEED_TIPS = chrono.slice().reverse().filter((i) => TIPS[i].video || TIPS[i].videoVertical);
+if (FEED_TIPS.length >= 3) $("feedBtn").hidden = false;
+function feedSource(el, t, keepTime) {
+  const v = el.querySelector("video"), file = pickVideo(t);
+  if (v.dataset.file === file) return;
+  const at = keepTime ? v.currentTime : 0, wasPlaying = !v.paused;
+  const vertical = file === t.videoVertical;
+  v.dataset.file = file; v.classList.toggle("vertical", vertical);
+  const thumb = vertical ? t.videoVerticalThumb : t.videoThumb;
+  if (thumb) v.poster = vpath(thumb); else v.removeAttribute("poster");
+  v.replaceChildren();
+  const src = document.createElement("source"); src.src = vpath(file) + (thumb ? "" : "#t=0.1"); src.type = /\.webm$/i.test(file) ? "video/webm" : "video/mp4"; v.appendChild(src);
+  const caps = vertical ? (t.videoVerticalCaptions || t.videoCaptions) : t.videoCaptions;
+  if (caps) { const tr = document.createElement("track"); tr.kind = "captions"; tr.srclang = "en-GB"; tr.label = "English"; tr.src = vpath(caps); tr.default = true; v.appendChild(tr); }
+  v.load();
+  if (at) v.addEventListener("loadedmetadata", () => { try { v.currentTime = at; } catch (e) { /* ignore */ } if (wasPlaying) v.play().catch(() => {}); }, { once: true });
+}
+function buildFeed() {
+  const list = $("feedList"); list.replaceChildren(); feed.items = [];
+  FEED_TIPS.forEach((i, n) => {
+    const t = TIPS[i];
+    const el = document.createElement("section"); el.className = "feeditem"; el.dataset.n = String(n);
+    el.setAttribute("aria-label", `Video ${n + 1} of ${FEED_TIPS.length}: ${t.head}`);
+    const v = document.createElement("video"); v.controls = true; v.playsInline = true; v.muted = !feed.sound; v.preload = "none";
+    v.setAttribute("aria-label", `Video: ${t.head}`);
+    const h = document.createElement("h3"); h.textContent = t.head;
+    const acts = document.createElement("div"); acts.className = "feedacts";
+    const read = document.createElement("button"); read.type = "button"; read.className = "feedctl"; read.textContent = "Read the tip";
+    read.addEventListener("click", () => { closeFeed(); openDetail(i); });
+    acts.appendChild(read);
+    const prompt = (tryParts(t.try || "").find((x) => x.kind === "prompt") || {}).text;
+    if (prompt) { const cp = document.createElement("button"); cp.type = "button"; cp.className = "feedctl"; cp.textContent = "Copy prompt"; cp.addEventListener("click", () => copyText(plainOf(prompt), cp, $("feedPos"))); acts.appendChild(cp); }
+    if (t.videoText) { const a = document.createElement("a"); a.href = vpath(t.videoText); a.textContent = "Text version (PDF)"; acts.appendChild(a); }
+    el.append(v, h, acts); list.appendChild(el); feed.items.push({ el, t, loaded: false });
+  });
+  if (feed.obs) feed.obs.disconnect();
+  feed.obs = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting && e.intersectionRatio >= 0.6) setFeedCurrent(Number(e.target.dataset.n));
+  }, { root: list, threshold: [0.6] });
+  feed.items.forEach((it) => feed.obs.observe(it.el));
+}
+function ensureLoaded(n) {
+  const it = feed.items[n]; if (!it || it.loaded) return;
+  it.loaded = true; const v = it.el.querySelector("video"); v.preload = "metadata"; feedSource(it.el, it.t, false);
+}
+function setFeedCurrent(n) {
+  if (n === feed.current) return;
+  feed.items.forEach((it, k) => { const v = it.el.querySelector("video"); if (k !== n && !v.paused) v.pause(); });
+  feed.current = n; ensureLoaded(n); ensureLoaded(n + 1);
+  $("feedPos").textContent = `${n + 1} of ${feed.items.length}`;
+  $("feedPrev").disabled = n === 0; $("feedNext").disabled = n === feed.items.length - 1;
+  const v = feed.items[n].el.querySelector("video"); v.muted = !feed.sound;
+  if (!reduced.matches) v.play().catch(() => {});
+}
+function goFeed(n) {
+  const it = feed.items[Math.max(0, Math.min(feed.items.length - 1, n))]; if (!it) return;
+  it.el.scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "start" });
+}
+function openFeed() {
+  if (!feed.items.length) buildFeed();
+  feed.current = -1;
+  $("feedDlg").showModal();
+  $("feedList").scrollTop = 0;
+  requestAnimationFrame(() => setFeedCurrent(0));
+  $("feedClose").focus();
+}
+function closeFeed() { if ($("feedDlg").open) $("feedDlg").close(); }
+$("feedDlg").addEventListener("close", () => { feed.items.forEach((it) => { try { it.el.querySelector("video").pause(); } catch (e) { /* ignore */ } }); $("feedBtn").focus({ preventScroll: true }); });
+$("feedBtn").addEventListener("click", openFeed);
+$("feedClose").addEventListener("click", closeFeed);
+$("feedPrev").addEventListener("click", () => goFeed(feed.current - 1));
+$("feedNext").addEventListener("click", () => goFeed(feed.current + 1));
+$("feedSound").addEventListener("click", () => {
+  feed.sound = !feed.sound;
+  $("feedSound").setAttribute("aria-pressed", String(feed.sound)); $("feedSound").textContent = feed.sound ? "Turn sound off" : "Turn sound on";
+  const it = feed.items[feed.current]; if (it) { const v = it.el.querySelector("video"); v.muted = !feed.sound; if (feed.sound && v.paused && !reduced.matches) v.play().catch(() => {}); }
+});
+$("feedDlg").addEventListener("keydown", (e) => {
+  if (e.target.closest && e.target.closest("video")) return;
+  if (["ArrowDown", "PageDown"].includes(e.key)) { e.preventDefault(); goFeed(feed.current + 1); }
+  if (["ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); goFeed(feed.current - 1); }
+});
+portrait.addEventListener && portrait.addEventListener("change", () => { feed.items.forEach((it) => { if (it.loaded) feedSource(it.el, it.t, true); }); });
+
 // Links to a tip use its headline, for example #your-chatbot-has-a-computer
 const linkKey = decodeURIComponent((location.hash || "").slice(1));
 if (linkKey) { const i = TIPS.findIndex((t) => t.key === linkKey); if (i >= 0) setTimeout(() => openDetail(i), 50); }
