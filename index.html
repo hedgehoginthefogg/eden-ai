@@ -762,6 +762,7 @@ body.selecting .shakebtn { display: none; }
     <h2 id="feedHead" class="vh">Tip videos</h2>
     <button type="button" class="feedctl" id="feedSound" aria-pressed="false">Turn sound on</button>
     <span class="feedpos" id="feedPos" aria-live="polite"></span>
+    <button type="button" class="feedctl" id="feedRestart" hidden>Start from the beginning</button>
     <button type="button" class="feedctl" id="feedClose">Close</button>
   </div>
   <div class="feedlist" id="feedList"></div>
@@ -2296,7 +2297,8 @@ requestAnimationFrame(() => layout({ stagger: 18 }));
    by itself for anyone who has asked their device to reduce motion. Only the video on screen and the next one load. */
 const feed = { items: [], sound: false, current: -1, obs: null };
 const vpath = (name) => "videos/" + encodeURIComponent(name);
-const FEED_TIPS = chrono.slice().reverse().filter((i) => TIPS[i].video || TIPS[i].videoVertical);
+const FEED_TIPS = chrono.filter((i) => TIPS[i].video || TIPS[i].videoVertical);
+const FEED_KEY = "edenGenaiTipsFeed.v1";
 if (FEED_TIPS.length >= 3) $("feedBtn").hidden = false;
 function feedSource(el, t, keepTime) {
   const v = el.querySelector("video"), file = pickVideo(t);
@@ -2320,6 +2322,8 @@ function buildFeed() {
     const el = document.createElement("section"); el.className = "feeditem"; el.dataset.n = String(n);
     el.setAttribute("aria-label", `Video ${n + 1} of ${FEED_TIPS.length}: ${t.head}`);
     const v = document.createElement("video"); v.controls = true; v.playsInline = true; v.muted = !feed.sound; v.preload = "none";
+    // If someone uses the player's own mute button, keep the Turn sound on/off button in step.
+    v.addEventListener("volumechange", () => { if (feed.items[feed.current] && feed.items[feed.current].el === el && feed.sound === v.muted) setFeedSound(!v.muted, false); });
     v.setAttribute("aria-label", `Video: ${t.head}`);
     const h = document.createElement("h3"); h.textContent = t.head;
     const acts = document.createElement("div"); acts.className = "feedacts";
@@ -2345,6 +2349,8 @@ function setFeedCurrent(n) {
   if (n === feed.current) return;
   feed.items.forEach((it, k) => { const v = it.el.querySelector("video"); if (k !== n && !v.paused) v.pause(); });
   feed.current = n; ensureLoaded(n); ensureLoaded(n + 1);
+  try { localStorage.setItem(FEED_KEY, feed.items[n].t.key || ""); } catch (e) { /* ignore */ }
+  if (n === 0) $("feedRestart").hidden = true;
   $("feedPos").textContent = `${n + 1} of ${feed.items.length}`;
   $("feedPrev").disabled = n === 0; $("feedNext").disabled = n === feed.items.length - 1;
   const v = feed.items[n].el.querySelector("video"); v.muted = !feed.sound;
@@ -2357,22 +2363,30 @@ function goFeed(n) {
 function openFeed() {
   if (!feed.items.length) buildFeed();
   feed.current = -1;
+  let startAt = 0;
+  try { const k = localStorage.getItem(FEED_KEY); const n = feed.items.findIndex((it) => it.t.key === k); if (n > 0) startAt = n; } catch (e) { /* ignore */ }
+  $("feedRestart").hidden = startAt === 0;
   $("feedDlg").showModal();
-  $("feedList").scrollTop = 0;
-  requestAnimationFrame(() => setFeedCurrent(0));
+  requestAnimationFrame(() => {
+    if (startAt) feed.items[startAt].el.scrollIntoView({ behavior: "auto", block: "start" }); else $("feedList").scrollTop = 0;
+    setFeedCurrent(startAt);
+  });
   $("feedClose").focus();
 }
+$("feedRestart").addEventListener("click", () => { $("feedRestart").hidden = true; goFeed(0); });
 function closeFeed() { if ($("feedDlg").open) $("feedDlg").close(); }
 $("feedDlg").addEventListener("close", () => { feed.items.forEach((it) => { try { it.el.querySelector("video").pause(); } catch (e) { /* ignore */ } }); $("feedBtn").focus({ preventScroll: true }); });
 $("feedBtn").addEventListener("click", openFeed);
 $("feedClose").addEventListener("click", closeFeed);
 $("feedPrev").addEventListener("click", () => goFeed(feed.current - 1));
 $("feedNext").addEventListener("click", () => goFeed(feed.current + 1));
-$("feedSound").addEventListener("click", () => {
-  feed.sound = !feed.sound;
-  $("feedSound").setAttribute("aria-pressed", String(feed.sound)); $("feedSound").textContent = feed.sound ? "Turn sound off" : "Turn sound on";
-  const it = feed.items[feed.current]; if (it) { const v = it.el.querySelector("video"); v.muted = !feed.sound; if (feed.sound && v.paused && !reduced.matches) v.play().catch(() => {}); }
-});
+function setFeedSound(on, applyToVideo) {
+  feed.sound = on;
+  $("feedSound").setAttribute("aria-pressed", String(on)); $("feedSound").textContent = on ? "Turn sound off" : "Turn sound on";
+  if (!applyToVideo) return;
+  const it = feed.items[feed.current]; if (it) { const v = it.el.querySelector("video"); v.muted = !on; if (on && v.paused && !reduced.matches) v.play().catch(() => {}); }
+}
+$("feedSound").addEventListener("click", () => setFeedSound(!feed.sound, true));
 $("feedDlg").addEventListener("keydown", (e) => {
   if (e.target.closest && e.target.closest("video")) return;
   if (["ArrowDown", "PageDown"].includes(e.key)) { e.preventDefault(); goFeed(feed.current + 1); }
